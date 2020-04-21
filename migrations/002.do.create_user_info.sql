@@ -3,5 +3,5 @@ CREATE TABLE user_info (
   bio TEXT,
   lfm_in TEXT,
   avatar TEXT,
-  user_id INTEGER REFERENCES user(id) ON DELETE CASCADE
+  user_id INTEGER REFERENCES users(id) ON DELETE CASCADE
 );

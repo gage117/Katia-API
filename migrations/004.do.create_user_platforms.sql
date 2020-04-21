@@ -6,6 +6,6 @@ CREATE TYPE platform_type AS ENUM (
 );
 
 CREATE TABLE user_platforms (
-  user_id INTEGER REFERENCES user(id) ON DELETE CASCADE;
-  platform platform_type
+  user_id INTEGER REFERENCES users(id) ON DELETE CASCADE NOT NULL,
+  platform platform_type NOT NULL
 );
