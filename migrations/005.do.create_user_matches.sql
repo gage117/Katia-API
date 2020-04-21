@@ -1,0 +1,4 @@
+CREATE TABLE user_matches (
+  user_id INTEGER NOT NULL REFERENCES user(id) ON DELETE CASCADE,
+  match_user_id INTEGER NOT NULL REFERENCES user(id) ON DELETE CASCADE
+);
