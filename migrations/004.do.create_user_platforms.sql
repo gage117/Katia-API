@@ -2,7 +2,7 @@ CREATE TYPE platform_type AS ENUM (
   'PlayStation',
   'Xbox',
   'PC',
-  'Switch'
+  'Nintendo'
 );
 
 CREATE TABLE user_platforms (
