@@ -1,14 +1,14 @@
 BEGIN;
 
 TRUNCATE
-  user,
+  users,
   user_info,
   user_genres,
   user_platforms,
   user_matches
   RESTART IDENTITY CASCADE;
 
-INSERT INTO user (email, username, password)
+INSERT INTO users (email, username, password)
 VALUES
   ('gamerdude22@test.com', 'gamerdude22', '$2a$12$Pkxp8JTF90HG6gYbIKJiiuzPjBHSOcpe1oUY6c1ESHcZ0ISUHmm0K'),
   ('lonelygamer69@test.com', 'lonelygamer69', '$2a$12$Pkxp8JTF90HG6gYbIKJiiuzPjBHSOcpe1oUY6c1ESHcZ0ISUHmm0K'),
@@ -141,3 +141,4 @@ VALUES
   (11, 7),
   (11, 8);
   
+COMMIT;

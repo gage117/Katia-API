@@ -5,7 +5,9 @@ const cors = require('cors');
 const helmet = require('helmet');
 const { NODE_ENV } = require('./config');
 const errorHandler = require('./middleware/error-handling');
+
 const authRouter = require('./auth/auth-router');
+const userRouter = require('./user/user-router');
 
 const app = express();
 
@@ -18,10 +20,7 @@ app.use(helmet());
 app.use(cors());
 
 app.use('/api/auth', authRouter);
-
-app.get('/', (req, res) => {
-  res.send('Hello, boilerplate!');
-});
+app.use('/api/user', userRouter);
 
 app.use(errorHandler);
 
