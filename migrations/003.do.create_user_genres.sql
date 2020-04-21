@@ -1,6 +1,18 @@
 CREATE TYPE genre_type AS enum (
   'Battle Royale',
-  'FPS'
+  'FPS',
+  'MMO',
+  'MOBA',
+  'RPG',
+  'Sports',
+  'Puzzle',
+  'Racing',
+  'Simulation',
+  'VR',
+  'Horror',
+  'Adventure',
+  'Action',
+  'Platformer'
 );
 
 CREATE TABLE user_genres (
