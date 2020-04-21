@@ -1,3 +1,8 @@
+## Endpoints
+/auth/token
+* POST requires username and password
+* PUT
+
 # Express Boilerplate!
 
 This is a boilerplate project used for starting new projects!
