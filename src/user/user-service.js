@@ -49,6 +49,14 @@ const UserService = {
       .then(user => !!user);
   },
 
+  // check if an email already exists
+  hasUserWithEmail(db, email) {
+    return db('users')
+    .where({ email })
+    .first()
+    .then(user => !!user)
+  },
+
   // insert a new user
   insertUser(db, newUser) {
     return db
@@ -234,7 +242,6 @@ const UserService = {
     return {
       id: user.id,
       email: xss(user.email),
-      username: xss(user.username),
       display_name: xss(user.display_name),
       bio: xss(user.bio),
       lfm_in: xss(user.lfm_in),
