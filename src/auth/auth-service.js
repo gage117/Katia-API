@@ -23,6 +23,11 @@ const AuthService = {
       algorithms: ['HS256'],
     });
   },
+  getUserWithEmail(db, email) {
+    return db('users')
+    .where({ email })
+    .first();
+  },
 };
 
 module.exports = AuthService;

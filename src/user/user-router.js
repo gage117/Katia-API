@@ -59,7 +59,7 @@ userRouter
                   user_id: user.id
                 };
 
-                UserService.insertInfo(
+                UserService.insertUserInfo(
                   req.app.get('db'),
                   newInfo
                 )
