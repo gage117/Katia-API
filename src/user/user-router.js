@@ -1,8 +1,5 @@
 const express = require('express');
 const path = require('path');
-const bcrypt = require('bcryptjs');
-
-const config = require('../config');
 
 const UserService = require('./user-service');
 
@@ -93,7 +90,7 @@ userRouter
 
 userRouter
   .route('/:userId')
-  .patch(checkUserExists, bodyParser, (req, res, next) => {
+  .patch(checkUserExists, bodyParser, async (req, res, next) => {
     const {
       display_name,
       bio,
@@ -141,9 +138,15 @@ userRouter
       })
       .catch(next);
   })
-  .get(checkUserExists, (req, res) => {
-    const profile = UserService.getUserInfo(req.app.get('db'), res.user.id);
-    res.json(UserService.serializeProfile(profile));
+  .get(checkUserExists, async (req, res) => {
+    const profile = await UserService.getUserInfo(req.app.get('db'), req.params.userId);
+    const genres = await UserService.getUserGenres(req.app.get('db'), req.params.userId);
+    const platforms = await UserService.getUserPlatforms(req.app.get('db', req.params.userId));
+    res.json({
+      ...UserService.serializeProfile(profile),
+      ...genres,
+      ...platforms
+    });
   });
 
 userRouter
