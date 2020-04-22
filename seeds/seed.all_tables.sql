@@ -47,8 +47,8 @@ VALUES
   (3, 'FPS'),
   (3, 'MMO'),
   (4, 'Battle Royale'),
-  (5, 'Racint'),
-  (5, 'Simiulation'),
+  (5, 'Racing'),
+  (5, 'Simulation'),
   (6, 'Action'),
   (6, 'Adventure'),
   (6, 'Horror'),
@@ -70,7 +70,7 @@ VALUES
 INSERT INTO user_platforms (user_id, platform)
 VALUES
   (1, 'PlayStation'),
-  (1, 'PC')
+  (1, 'PC'),
   (2, 'PC'),
   (2, 'Xbox'),
   (3, 'Nintendo'),
@@ -119,7 +119,7 @@ VALUES
   (6, 4),
   (7, 11),
   (7, 2),
-  (7, 12),
+  (7, 11),
   (7, 9),
   (7, 5),
   (8, 10),
