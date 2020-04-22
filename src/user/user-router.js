@@ -140,6 +140,46 @@ userRouter
         res.status(204).end();
       })
       .catch(next);
+  })
+  .get(checkUserExists, (req, res) => {
+    const profile = UserService.getUserInfo(req.app.get('db'), res.user.id);
+    res.json(UserService.serializeProfile(profile));
+  });
+
+userRouter
+  .route('/:userId/matches')
+  .get(checkUserExists, (req, res, next) => {
+    UserService.getUserMatches(
+      req.app.get('db'),
+      req.params.userId
+    )
+      .then(matches => {
+        const profiles = matches.map(match => {
+          return UserService.getUserInfo(
+            req.app.get('db'),
+            match.match_user_id
+          )
+            .then(profile => {
+              return profile;
+            });
+        });
+
+        res.json(UserService.serializeProfiles(profiles));
+      })
+      .catch(next);
+  })
+  .post(checkUserExists, (req, res, next) => {
+    const { matchId } = req.body;
+
+    UserService.insertMatch(
+      req.app.get('db'),
+      req.params.userId,
+      matchId
+    )
+      .then(() => {
+        res.status(204).end();
+      })
+      .catch(next);
   });
 
 async function checkUserExists(req, res, next) {

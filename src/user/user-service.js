@@ -95,6 +95,29 @@ const UserService = {
       });
   },
 
+  // insert a match for a user
+  insertMatch(db, user_id, match_user_id) {
+    return db
+      .insert({ user_id, match_user_id })
+      .into('user_matches')
+      .returning('*')
+      .then(([match]) => match);
+  },
+
+  // remove a match
+  removeMatch(db, user_id, match_user_id) {
+    return db('user_matches')
+      .where({ user_id })
+      .andWhere({ match_user_id })
+      .del()
+      .then(() => {
+        return db('user_matches')
+          .where({ user_id: match_user_id })
+          .andWhere({ match_user_id: user_id })
+          .del();
+      });
+  },
+
   // gets a users preferred genres
   getUserGenres(db, user_id) {
     return db('user_genres')
