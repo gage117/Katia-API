@@ -1,0 +1,2 @@
+ALTER TABLE users
+ADD username TEXT NOT NULL;

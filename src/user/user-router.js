@@ -11,11 +11,11 @@ userRouter
   .post(bodyParser, (req, res, next) => {
     const {
       email,
-      username,
+      display_name,
       password
     } = req.body;
 
-    for(const field of ['email', 'username', 'password'])
+    for(const field of ['email', 'display_name', 'password'])
       if(!req.body[field])
         return res.status(400).json({
           error: `Missing ${field} in request body`
@@ -28,21 +28,20 @@ userRouter
         error: passwordError
       });
     
-    UserService.hasUserWithUsername(
+    UserService.hasUserWithEmail(
       req.app.get('db'),
-      username
+      email
     )
       .then(exists => {
         if(exists)
           return res.status(400).json({
-            error: 'Username already taken'
+            error: 'Email already taken'
           });
 
         return UserService.hashPassword(password)
           .then(hashedPassword => {
             const newUser = {
               email,
-              username,
               password: hashedPassword
             };
 
@@ -52,7 +51,7 @@ userRouter
             )
               .then(user => {
                 const newInfo = {
-                  display_name: username,
+                  display_name: display_name,
                   bio: null,
                   lfm_in: null,
                   avatar: null,
