@@ -25,8 +25,8 @@ const AuthService = {
   },
   getUserWithEmail(db, email) {
     return db('users')
-    .where({ email })
-    .first();
+      .where({ email })
+      .first();
   },
 };
 

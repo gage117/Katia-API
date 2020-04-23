@@ -21,40 +21,30 @@ const UserService = {
   getById(db, id) {
     return db
       .from('users')
-      .selet('*')
+      .select('*')
       .where({
         id
       })
       .first();
   },
 
-  // get a user by their username
-  getByName(db, username) {
+  // get a user by their email
+  getByEmail(db, email) {
     return db
       .from('users')
       .select('*')
       .where({
-        username
+        email
       })
       .first();
-  },
-
-  // check if a username already exists
-  hasUserWithUsername(db, username) {
-    return db('users')
-      .where({
-        username
-      })
-      .first()
-      .then(user => !!user);
   },
 
   // check if an email already exists
   hasUserWithEmail(db, email) {
     return db('users')
-    .where({ email })
-    .first()
-    .then(user => !!user)
+      .where({ email })
+      .first()
+      .then(user => !!user);
   },
 
   // insert a new user
@@ -92,15 +82,6 @@ const UserService = {
         user_id
       })
       .first();
-  },
-
-  // gets a users matches
-  getUserMatches(db, user_id) {
-    return db('user_matches')
-      .select('match_user_id')
-      .where({
-        user_id
-      });
   },
 
   // insert a match for a user

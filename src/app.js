@@ -8,6 +8,7 @@ const errorHandler = require('./middleware/error-handling');
 
 const authRouter = require('./auth/auth-router');
 const userRouter = require('./user/user-router');
+const swipeRouter = require('./swipe/swipe-router');
 
 const app = express();
 
@@ -21,6 +22,7 @@ app.use(cors());
 
 app.use('/api/auth', authRouter);
 app.use('/api/user', userRouter);
+app.use('/api/swipe', swipeRouter);
 
 app.use(errorHandler);
 
