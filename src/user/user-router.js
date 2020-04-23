@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 
 const UserService = require('./user-service');
+const SwipeService = require('../swipe/swipe-service');
 
 const userRouter = express.Router();
 const bodyParser = express.json();
@@ -139,19 +140,19 @@ userRouter
   })
   .get(checkUserExists, async (req, res) => {
     const profile = await UserService.getUserInfo(req.app.get('db'), req.params.userId);
-    const genres = await UserService.getUserGenres(req.app.get('db'), req.params.userId);
-    const platforms = await UserService.getUserPlatforms(req.app.get('db', req.params.userId));
+    const genres = await UserService.getUserGenres(req.app.get('db'), req.params.userId).then(genres => genres.map(genre => genre.genre));
+    const platforms = await UserService.getUserPlatforms(req.app.get('db'), req.params.userId).then(platforms => platforms.map(platform => platform.platform));
     res.json({
       ...UserService.serializeProfile(profile),
-      ...genres,
-      ...platforms
+      genres,
+      platforms
     });
   });
 
 userRouter
   .route('/:userId/matches')
   .get(checkUserExists, (req, res, next) => {
-    UserService.getUserMatches(
+    SwipeService.getUserMatches(
       req.app.get('db'),
       req.params.userId
     )
