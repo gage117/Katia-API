@@ -77,7 +77,7 @@ const UserService = {
   // gets a users profile info
   getUserInfo(db, user_id) {
     return db('user_info')
-      .select('*')
+      .select('display_name', 'bio', 'lfm_in', 'avatar')
       .where({
         user_id
       })
