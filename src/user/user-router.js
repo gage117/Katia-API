@@ -159,17 +159,18 @@ userRouter
       req.params.userId
     )
       .then(matches => {
-        const profiles = matches.map(match => {
-          return UserService.getUserInfo(
+        const profiles = matches.map(async (match) => {
+          const userInfo = await UserService.getUserInfo(
             req.app.get('db'),
             match.match_user_id
           )
             .then(profile => {
               return profile;
             });
+            
+            return {...userInfo};
         });
-
-        res.json(UserService.serializeProfiles(profiles));
+        Promise.all(profiles).then(profiles => res.json(UserService.serializeProfiles(profiles)));
       })
       .catch(next);
   })
