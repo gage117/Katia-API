@@ -1,6 +1,7 @@
 const express = require('express');
 
 const swipeRouter = express.Router();
+const bodyParser = express.json();
 
 const SwipeService = require('./swipe-service');
 const UserService = require('../user/user-service');
@@ -35,6 +36,32 @@ swipeRouter
         });
 
         Promise.all(queue).then((queue) => res.json({ queue }));
+      })
+      .catch(next);
+  })
+  .post(bodyParser, (req, res, next) => {
+    const { id } = req.body;
+
+    SwipeService.matchExists(
+      req.app.get('db'),
+      req.params.userId,
+      id
+    )
+      .then(exists => {
+        if(exists) {
+          return res.status(400).json({
+            error: 'Match already exists'
+          });
+        }
+
+        SwipeService.addUserMatch(
+          req.app.get('db'),
+          req.params.userId,
+          id
+        )
+          .then(() => {
+            res.status(204).end();
+          });
       })
       .catch(next);
   });
