@@ -99,6 +99,7 @@ userRouter
       lfm_in,
       avatar
     } = req.body;
+    console.log(req.body)
 
     const profileToUpdate = {
       display_name,
@@ -114,27 +115,28 @@ userRouter
       });
     }
 
-    UserService.updateUserInfo(
+    UserService.updateUser(
       req.app.get('db'),
       req.params.userId,
       profileToUpdate
     )
-      .then(() => {
-        if(genres.length !== 0) {
+      .then(user => {
+        if(genres) {
           UserService.updateGenresForUser(
             req.app.get('db'),
             req.params.userId,
             genres
           );
         }
-        if(platforms.length !== 0) {
+        if(platforms) {
           UserService.updatePlatformsForUser(
             req.app.get('db'),
             req.params.userId,
             platforms
           );
         }
-        res.status(204).end();
+        console.log(user)
+        res.status(203).json(user);
       })
       .catch(next);
   })

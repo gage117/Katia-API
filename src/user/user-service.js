@@ -67,11 +67,11 @@ const UserService = {
 
   // update an existing user
   updateUser(db, id, newUserFields) {
-    return db('users')
-      .where({
-        id
-      })
-      .update(newUserFields);
+    return db('user_info')
+      // .innerJoin('users', 'user_info.user_id', 'users.id')
+      .where('user_info.user_id', id)
+      .update(newUserFields)
+      .returning('*')
   },
 
   // gets a users profile info
