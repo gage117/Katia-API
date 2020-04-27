@@ -24,17 +24,17 @@ VALUES
 
 INSERT INTO user_info (display_name, bio, lfm_in, avatar, user_id)
 VALUES
-  ('gamerdude22', 'I like games dude', 'Fortnite', '<base64 string here>', 1),
-  ('lonelygamer69', 'I need friends', 'Minecraft', '<base64 string here>', 2),
-  ('player63', 'I like playing games', 'COD Warzone', '<base64 string here>', 3),
-  ('iliketrains', 'I like trains', 'Fortnite', '<base64 string here>', 4),
-  ('player3', 'I like playing games', 'CSGO', '<base64 string here>', 5),
-  ('yellowbanana', 'I like bananas', 'COD Modern Warfare', '<base64 string here>', 6),
-  ('yikes', 'oof', 'Destiny 2', '<base64 string here>', 7),
-  ('idkwhatimdoing', 'what is going on', 'COD Warzone', '<base64 string here>', 8),
-  ('gaming4life', 'gaming is life', 'CSGO', '<base64 string here>', 9),
-  ('gamesrfun', 'games are fun', 'Fortnite', '<base64 string here>', 10),
-  ('player1', 'i like playing', 'Minecraft', '<base64 string here>', 11);
+  ('gamerdude22', 'I like games dude', 'Fortnite,COD Warzone,Overwatch', '<base64 string here>', 1),
+  ('lonelygamer69', 'I need friends', 'Minecraft,Rust,Ark', '<base64 string here>', 2),
+  ('player63', 'I like playing games', 'COD Warzone,Fortnite,CSGO', '<base64 string here>', 3),
+  ('iliketrains', 'I like trains', 'Fortnite,Apex Legends,COD Warzone', '<base64 string here>', 4),
+  ('player3', 'I like playing games', 'CSGO,Overwatch,COD Modern Warfare', '<base64 string here>', 5),
+  ('yellowbanana', 'I like bananas', 'COD Modern Warfare,Destiny 2,Overwatch', '<base64 string here>', 6),
+  ('yikes', 'oof', 'Destiny 2,Overwatch,Minecraft', '<base64 string here>', 7),
+  ('idkwhatimdoing', 'what is going on', 'COD Warzone,Fortnite,Apex Legends', '<base64 string here>', 8),
+  ('gaming4life', 'gaming is life', 'CSGO,COD Modern Warfare', '<base64 string here>', 9),
+  ('gamesrfun', 'games are fun', 'Fortnite,Apex Legends,COD Warzone', '<base64 string here>', 10),
+  ('player1', 'i like playing', 'Minecraft,Conan Exiles,Rust', '<base64 string here>', 11);
 
 INSERT INTO user_genres (user_id, genre)
 VALUES
