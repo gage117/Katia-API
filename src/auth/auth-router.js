@@ -41,15 +41,15 @@ authRouter
 
       const sub = dbUser.email;
 
-      const profile = await UserService.getUserInfo(req.app.get('db'), dbUser.id);
-      const genres = await UserService.getUserGenres(req.app.get('db'), dbUser.id).then(genres => genres.map(genre => genre.genre));
-      const platforms = await UserService.getUserPlatforms(req.app.get('db'), dbUser.id).then(platforms => platforms.map(platform => platform.platform));
+      // const profile = await UserService.getUserInfo(req.app.get('db'), dbUser.id);
+      // const genres = await UserService.getUserGenres(req.app.get('db'), dbUser.id).then(genres => genres.map(genre => genre.genre));
+      // const platforms = await UserService.getUserPlatforms(req.app.get('db'), dbUser.id).then(platforms => platforms.map(platform => platform.platform));
 
       const payload = {
         id: dbUser.id,
-        ...profile,
-        genres,
-        platforms
+        // ...profile,
+        // genres,
+        // platforms
       };
       res.send({
         authToken: AuthService.createJwt(sub, payload),
