@@ -99,7 +99,6 @@ userRouter
       lfm_in,
       avatar
     } = req.body;
-    console.log(req.body)
 
     const profileToUpdate = {
       display_name,
@@ -112,6 +111,12 @@ userRouter
     if(numberOfValues === 0 && genres.length === 0 && platforms.length === 0) {
       return res.status(400).json({
         error: 'Request body must contain profile info to update'
+      });
+    }
+
+    if(lfm_in.split(',').length > 3) {
+      return res.status(400).json({
+        error: '"lfm_in" must be a max of 3 games, seperated by commas'
       });
     }
 
@@ -135,8 +140,10 @@ userRouter
             platforms
           );
         }
-        console.log(user[0])
+
+
         res.status(203).json(user[0]);
+
       })
       .catch(next);
   })
@@ -149,6 +156,7 @@ userRouter
     
     res.json({
       ...UserService.serializeProfile(profile),
+      lfm_in: profile.lfm_in.split(','),
       genres,
       platforms
     });
@@ -162,17 +170,18 @@ userRouter
       req.params.userId
     )
       .then(matches => {
-        const profiles = matches.map(match => {
-          return UserService.getUserInfo(
+        const profiles = matches.map(async (match) => {
+          const userInfo = await UserService.getUserInfo(
             req.app.get('db'),
             match.match_user_id
           )
             .then(profile => {
               return profile;
             });
+            
+            return {...userInfo};
         });
-
-        res.json(UserService.serializeProfiles(profiles));
+        Promise.all(profiles).then(profiles => res.json(UserService.serializeProfiles(profiles)));
       })
       .catch(next);
   })
