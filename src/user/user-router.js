@@ -135,8 +135,8 @@ userRouter
             platforms
           );
         }
-        console.log(user)
-        res.status(203).json(user);
+        console.log(user[0])
+        res.status(203).json(user[0]);
       })
       .catch(next);
   })
