@@ -140,7 +140,10 @@ userRouter
             platforms
           );
         }
-        res.json(user);
+
+
+        res.status(203).json(user[0]);
+
       })
       .catch(next);
   })
