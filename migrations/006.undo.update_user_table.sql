@@ -1,2 +1,2 @@
 ALTER TABLE users
-ADD COLUMN username TEXT NOT NULL;
+ADD COLUMN username TEXT;
