@@ -144,6 +144,9 @@ userRouter
     const profile = await UserService.getUserInfo(req.app.get('db'), req.params.userId);
     const genres = await UserService.getUserGenres(req.app.get('db'), req.params.userId).then(genres => genres.map(genre => genre.genre));
     const platforms = await UserService.getUserPlatforms(req.app.get('db'), req.params.userId).then(platforms => platforms.map(platform => platform.platform));
+
+    console.log(req.params)
+    
     res.json({
       ...UserService.serializeProfile(profile),
       genres,
