@@ -116,7 +116,7 @@ userRouter
 
     if(lfm_in !== null && lfm_in.split(',').length > 3) {
       return res.status(400).json({
-        error: '"lfm_in" must be a max of 3 games, seperated by commas'
+        error: '"lfm_in" must be a max of 3 games, separated by commas'
       });
     }
 
@@ -163,7 +163,7 @@ userRouter
     const genres = await UserService.getUserGenres(req.app.get('db'), req.params.userId).then(genres => genres.map(genre => genre.genre));
     const platforms = await UserService.getUserPlatforms(req.app.get('db'), req.params.userId).then(platforms => platforms.map(platform => platform.platform));
 
-    console.log(req.params)
+    console.log(req.params);
     
     res.json({
       ...UserService.serializeProfile(profile),
