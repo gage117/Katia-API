@@ -1,11 +1,23 @@
 const express = require('express');
+const aws = require('aws-sdk');
+const multerS3 = require('multer-s3');
+const multer = require('multer');
 const path = require('path');
+const url = require('url');
+
+const config = require('../config');
 
 const UserService = require('./user-service');
 const SwipeService = require('../swipe/swipe-service');
 
 const userRouter = express.Router();
 const bodyParser = express.json();
+
+const s3 = new aws.s3({
+  accessKeyId: config.AWS_ACCESS_KEY,
+  secretAccessKey: config.AWS_SECRET_KEY,
+  Buclet: config.AWS_BUCKET
+});
 
 userRouter
   .route('/')
@@ -151,8 +163,6 @@ userRouter
     const profile = await UserService.getUserInfo(req.app.get('db'), req.params.userId);
     const genres = await UserService.getUserGenres(req.app.get('db'), req.params.userId).then(genres => genres.map(genre => genre.genre));
     const platforms = await UserService.getUserPlatforms(req.app.get('db'), req.params.userId).then(platforms => platforms.map(platform => platform.platform));
-
-    console.log(req.params)
     
     res.json({
       ...UserService.serializeProfile(profile),
@@ -179,7 +189,7 @@ userRouter
               return profile;
             });
             
-            return {...userInfo};
+          return {...userInfo};
         });
         Promise.all(profiles).then(profiles => res.json(UserService.serializeProfiles(profiles)));
       })
@@ -199,6 +209,36 @@ userRouter
       .catch(next);
   });
 
+userRouter
+  .route('/:userId/avatar')
+  .post(checkUserExists, (req, res, next) => {
+    profileImgUpload(req, res, (error) => {
+      if(error) {
+        res.json({ error });
+      } else {
+        if(req.file === undefined) {
+          res.json({ error: 'No file selected' });
+        } else {
+          const imageName = req.file.key;
+          const imageLocation = req.file.location;
+
+          UserService.saveAvatar(
+            req.app.get('db'),
+            req.params.userId,
+            imageName
+          )
+            .then(() => {
+              res.json({ 
+                image: imageName ,
+                location: imageLocation
+              });
+            })
+            .catch(next);
+        }
+      }
+    });
+  });
+
 async function checkUserExists(req, res, next) {
   try {
     const user = await UserService.getById(
@@ -215,6 +255,35 @@ async function checkUserExists(req, res, next) {
     next();
   } catch (error) {
     next(error);
+  }
+}
+
+const profileImgUpload = multer({
+  storage: multerS3({
+    s3: s3,
+    bucket: config.AWS_BUCKET,
+    acl: 'public-read',
+    key: (req, file, cb) => {
+      cb(null, path.basename(file.originalname, path.extname(file.originalname)) + '-' + Date.now() + path.extname(file.originalname));
+    }
+  }),
+  limits: {
+    fileSize: 2000000
+  },
+  fileFilter: (req, file, cb) => {
+    checkFileType(file, cb);
+  }
+}).single('profileImage');
+
+function checkFileType(file, cb) {
+  const fileTypes = /jpeg|jpg|png|gif/;
+  const extname = fileTypes.test(path.extname(file.originalname).toLowerCase());
+  const mimeType = fileTypes.test(file.mimetype);
+
+  if(mimeType && extname) {
+    return cb(null, true);
+  } else {
+    cb('Error: Images Only!');
   }
 }
 
