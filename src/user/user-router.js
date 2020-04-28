@@ -116,9 +116,9 @@ userRouter
       });
     }
 
-    if(lfm_in.split(',').length > 3) {
+    if(lfm_in !== null && lfm_in.split(',').length > 3) {
       return res.status(400).json({
-        error: '"lfm_in" must be a max of 3 games, seperated by commas'
+        error: '"lfm_in" must be a max of 3 games, separated by commas'
       });
     }
 
@@ -129,10 +129,21 @@ userRouter
     )
       .then(user => {
         if(genres) {
+          let genresArr = genres.split(',');
+          for (let i = 0; i < genresArr.length; i++) {
+            let genreName = genresArr[i];
+            while (genreName[0] === ' ') { // Removes any spaces at the beginning of the name
+              genreName = genreName.slice(1);
+            }
+            while (genreName[genreName.length - 1] === ' ') { // Removes any spaces at the end of the name
+              genreName = genreName.slice(genreName.length - 1);
+            }
+            genresArr[i] = genreName;
+          }
           UserService.updateGenresForUser(
             req.app.get('db'),
             req.params.userId,
-            genres
+            genresArr
           );
         }
         if(platforms) {
@@ -153,10 +164,10 @@ userRouter
     const profile = await UserService.getUserInfo(req.app.get('db'), req.params.userId);
     const genres = await UserService.getUserGenres(req.app.get('db'), req.params.userId).then(genres => genres.map(genre => genre.genre));
     const platforms = await UserService.getUserPlatforms(req.app.get('db'), req.params.userId).then(platforms => platforms.map(platform => platform.platform));
-    
+
     res.json({
       ...UserService.serializeProfile(profile),
-      lfm_in: profile.lfm_in.split(','),
+      lfm_in: profile.lfm_in,
       genres,
       platforms
     });
