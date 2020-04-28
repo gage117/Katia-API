@@ -1,12 +1,11 @@
 ## Endpoints
-
+### This is an JSON API server, it both expects JSON and returns JSON.
 /auth/token
-* POST requires username and password
-* PUT
+* POST Creates an auth token. Requires valid ```email``` and ```password``` (created when you make a user account). Returns a JWT token named ```authToken```.
 
 /swipe/:userId
-* GET
-* POST
+* GET Get the queue of possible matches. Requires the ```userId```. Returns an JSON object with the key ```queue``` and the value is an array of all possible matches for the user to swipe on. 
+* POST When a user "approves" of a match it will add them to their matches table. Requires ```userId``` in params which is the Id of the current logged in user and ```id``` in the body which is the id of the user who was approved. Returns nothing but a status 201 when successful.
 
 /user/
 * GET
