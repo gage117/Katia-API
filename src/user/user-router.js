@@ -114,7 +114,7 @@ userRouter
       });
     }
 
-    if(lfm_in.split(',').length > 3) {
+    if(lfm_in !== null && lfm_in.split(',').length > 3) {
       return res.status(400).json({
         error: '"lfm_in" must be a max of 3 games, seperated by commas'
       });
@@ -156,7 +156,7 @@ userRouter
     
     res.json({
       ...UserService.serializeProfile(profile),
-      lfm_in: profile.lfm_in.split(','),
+      lfm_in: profile.lfm_in,
       genres,
       platforms
     });
