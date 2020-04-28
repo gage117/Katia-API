@@ -9,11 +9,11 @@
 
 /user/
 * GET Gets all user profiles. Requires nothing. Returns all users in the database as an array of objects. Each object will have a ```user_id```, ```display_name```, ```bio```, ```lfm_in```, and ```avatar```.
-* POST Creates a new user profile. Requires an ```email```, ```display_name```, and ```password```. Returns the 
+* POST Creates a new user profile. Requires an ```email```, ```display_name```, and ```password```. Returns the a JSON object with an ```id```, ```email```, ```display_name```, ```bio```, ```lfm_in```, and ```avatar```.
 
 /user/:userId
-* GET
-* PATCH
+* GET Gets the data for a specific user profile. Requires ```userId``` from params. Returns a JSON object with ```display_name```, ```bio```, ```lfm_in```, ```avatar```, ```genres```, and ```platforms```.
+* PATCH Updates a user profile. Requires the ```userId``` in params and in the body the requires values to update include: ```display_name```, ```bio```, ```lfm_in```, and ```avatar```. However it optionally will take ```genres``` and ```platforms```. Returns a 203 with the updated user information if successful.
 
 /user/:userId/matches
 * GET
