@@ -202,7 +202,10 @@ userRouter
 userRouter
   .route('/:userId/avatar')
   .post(upload.single('profileImg'), (req, res, next) => {
-    console.log(req.file);
+    UserService.saveAvatar(req.app.get('db'), req.params.userId, req.file.location)
+      .then(() => {
+        res.status(204).end();
+      });
   });
 
 async function checkUserExists(req, res, next) {

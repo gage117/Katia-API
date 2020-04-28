@@ -6,6 +6,7 @@ const config = require('../config');
 
 const s3Config = new AWS.S3({
   signatureVersion: 'v4',
+  region: 'us-west-1',
   accessKeyId: config.AWS_ACCESS_KEY,
   secretAccessKey: config.AWS_SECRET_KEY,
   Bucket: config.AWS_BUCKET
