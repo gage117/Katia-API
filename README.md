@@ -1,7 +1,25 @@
 ## Endpoints
+
 /auth/token
 * POST requires username and password
 * PUT
+
+/swipe/:userId
+* GET
+* POST
+
+/user/
+* GET
+* POST
+
+/user/:userId
+* GET
+* PATCH
+
+/user/:userId/matches
+* GET
+* POST
+
 
 # Express Boilerplate!
 
