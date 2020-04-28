@@ -127,10 +127,21 @@ userRouter
     )
       .then(user => {
         if(genres) {
+          let genresArr = genres.split(',');
+          for (let i = 0; i < genresArr.length; i++) {
+            let genreName = genresArr[i];
+            while (genreName[0] === ' ') { // Removes any spaces at the beginning of the name
+              genreName = genreName.slice(1);
+            }
+            while (genreName[genreName.length - 1] === ' ') { // Removes any spaces at the end of the name
+              genreName = genreName.slice(genreName.length - 1);
+            }
+            genresArr[i] = genreName;
+          }
           UserService.updateGenresForUser(
             req.app.get('db'),
             req.params.userId,
-            genres
+            genresArr
           );
         }
         if(platforms) {
