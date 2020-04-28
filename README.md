@@ -8,8 +8,8 @@
 * POST When a user "approves" of a match it will add them to their matches table. Requires ```userId``` in params which is the Id of the current logged in user and ```id``` in the body which is the id of the user who was approved. Returns nothing but a status 201 when successful.
 
 /user/
-* GET
-* POST
+* GET Gets all user profiles. Requires nothing. Returns all users in the database as an array of objects. Each object will have a ```user_id```, ```display_name```, ```bio```, ```lfm_in```, and ```avatar```.
+* POST Creates a new user profile. Requires an ```email```, ```display_name```, and ```password```. Returns the 
 
 /user/:userId
 * GET
@@ -19,6 +19,8 @@
 * GET
 * POST
 
+/user/:userId/avatar
+Requires profileImg: the image file and title:
 
 # Express Boilerplate!
 
