@@ -16,10 +16,11 @@
 * PATCH Updates a user profile. Requires the ```userId``` in params and in the body the requires values to update include: ```display_name```, ```bio```, ```lfm_in```, and ```avatar```. However it optionally will take ```genres``` and ```platforms```. Returns a 203 with the updated user information if successful.
 
 /user/:userId/matches
-* GET
-* POST
+* GET Get all matches that our logged in user has "approved" during swiping. Requires ```userId``` of the logged in user. Returns an array of Objects for each match with their ```display_name```, ```bio```, ```lfm_in```, and ```avatar```.
+* POST Functionally the same as POST /swipe/:userId
 
-/user/:userId/avatar
+### ENDPOINTS TODO:
+* /user/:userId/avatar
 Requires profileImg: the image file and title:
 
 # Express Boilerplate!
