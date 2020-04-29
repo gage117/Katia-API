@@ -1,11 +1,13 @@
 const express = require('express');
 const path = require('path');
+const upload = require('./avatar-service');
 
 const UserService = require('./user-service');
 const SwipeService = require('../swipe/swipe-service');
 
 const userRouter = express.Router();
 const bodyParser = express.json();
+
 
 userRouter
   .route('/')
@@ -162,7 +164,6 @@ userRouter
     const profile = await UserService.getUserInfo(req.app.get('db'), req.params.userId);
     const genres = await UserService.getUserGenres(req.app.get('db'), req.params.userId).then(genres => genres.map(genre => genre.genre));
     const platforms = await UserService.getUserPlatforms(req.app.get('db'), req.params.userId).then(platforms => platforms.map(platform => platform.platform));
-    
     res.json({
       ...UserService.serializeProfile(profile),
       lfm_in: profile.lfm_in,
@@ -188,7 +189,7 @@ userRouter
               return profile;
             });
             
-            return {...userInfo};
+          return {...userInfo};
         });
         Promise.all(profiles).then(profiles => res.json(UserService.serializeProfiles(profiles)));
       })
@@ -214,6 +215,15 @@ userRouter
   UserService.getGenres(req.app.get('db'))
   .then(genres => res.status(200).json(genres))
 })
+
+userRouter
+  .route('/:userId/avatar')
+  .post(upload.single('profileImg'), (req, res, next) => {
+    UserService.saveAvatar(req.app.get('db'), req.params.userId, req.file.location)
+      .then(() => {
+        res.json({ location: req.file.location });
+      });
+  });
 
 async function checkUserExists(req, res, next) {
   try {

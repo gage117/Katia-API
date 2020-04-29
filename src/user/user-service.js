@@ -71,7 +71,14 @@ const UserService = {
       // .innerJoin('users', 'user_info.user_id', 'users.id')
       .where('user_info.user_id', id)
       .update(newUserFields)
-      .returning('*')
+      .returning('*');
+  },
+
+  saveAvatar(db, user_id, imageLocation) {
+    return db('user_info')
+      .where({ user_id })
+      .update({ avatar: imageLocation })
+      .returning('*');
   },
 
   // gets a users profile info
