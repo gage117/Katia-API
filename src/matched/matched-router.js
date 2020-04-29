@@ -1,7 +1,6 @@
 const express = require('express');
 
 const matchedRouter = express.Router();
-const bodyParser = express.json();
 
 const MatchedService = require('./matched-service');
 const UserService = require('../user/user-service');
