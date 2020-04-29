@@ -93,7 +93,7 @@ userRouter
 userRouter
   .route('/:userId')
   .patch(checkUserExists, bodyParser, async (req, res, next) => {
-    const {
+    let {
       display_name,
       bio,
       genres,
@@ -102,7 +102,7 @@ userRouter
       avatar
     } = req.body;
 
-    const profileToUpdate = {
+    let profileToUpdate = {
       display_name,
       bio,
       lfm_in,
@@ -128,22 +128,11 @@ userRouter
       profileToUpdate
     )
       .then(user => {
-        if(typeof genres === 'string' && genres.length > 0) {
-          let genresArr = genres.split(',');
-          for (let i = 0; i < genresArr.length; i++) {
-            let genreName = genresArr[i];
-            while (genreName[0] === ' ') { // Removes any spaces at the beginning of the name
-              genreName = genreName.slice(1);
-            }
-            while (genreName[genreName.length - 1] === ' ') { // Removes any spaces at the end of the name
-              genreName = genreName.slice(genreName.length - 1);
-            }
-            genresArr[i] = genreName;
-          }
+        if(genres) {
           UserService.updateGenresForUser(
             req.app.get('db'),
             req.params.userId,
-            genresArr
+            genres
           );
         }
         if(platforms) {
@@ -154,9 +143,9 @@ userRouter
           );
         }
 
-
+        // console.log({...user[0], genres: })
+        console.log({...user[0]})
         res.status(203).json(user[0]);
-
       })
       .catch(next);
   })
