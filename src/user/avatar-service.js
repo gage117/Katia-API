@@ -27,8 +27,7 @@ const multerS3Config = multerS3({
     cb(null, { fieldName: file.fieldname });
   },
   key: function (req, file, cb) {
-    console.log(file);
-    cb(null, new Date().toISOString() + '-' + file.originalname);
+    cb(null, `${req.params.userId}-avatar-${new Date().toISOString()}`);
   }
 });
 
