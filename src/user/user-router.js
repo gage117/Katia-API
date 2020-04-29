@@ -215,7 +215,7 @@ userRouter
   .post(upload.single('profileImg'), (req, res, next) => {
     UserService.saveAvatar(req.app.get('db'), req.params.userId, req.file.location)
       .then(() => {
-        res.status(204).end();
+        res.json({ location: req.file.location });
       });
   });
 
