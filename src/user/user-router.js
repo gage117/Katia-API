@@ -212,11 +212,12 @@ userRouter
 
 userRouter
   .route('/:userId/avatar')
-  .post(upload.single('profileImg'), (req, res, next) => {
+  .post(checkUserExists, upload.single('profileImg'), (req, res, next) => {
     UserService.saveAvatar(req.app.get('db'), req.params.userId, req.file.location)
       .then(() => {
         res.json({ location: req.file.location });
-      });
+      })
+      .catch(next);
   });
 
 async function checkUserExists(req, res, next) {
@@ -230,7 +231,8 @@ async function checkUserExists(req, res, next) {
       res.status(404).json({
         error: 'User doesn\'t exist'
       });
-
+      
+    delete user.password;
     res.user = user;
     next();
   } catch (error) {
