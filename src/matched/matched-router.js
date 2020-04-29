@@ -46,28 +46,6 @@ matchedRouter
 
   });
 
-//   userRouter
-//   .route('/:userId/matches')
-//   .get(checkUserExists, (req, res, next) => {
-//     SwipeService.getUserMatches(
-//       req.app.get('db'),
-//       req.params.userId
-//     )
-//       .then(matches => {
-//         const profiles = matches.map(async (match) => {
-//           const userInfo = await UserService.getUserInfo(
-//             req.app.get('db'),
-//             match.match_user_id
-//           )
-//             .then(profile => {
-//               return profile;
-//             });
-            
-//           return {...userInfo};
-//         });
-//         Promise.all(profiles).then(profiles => res.json(UserService.serializeProfiles(profiles)));
-//       })
-//       .catch(next);
 
   async function checkUserExists(req, res, next) {
     try {
