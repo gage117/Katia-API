@@ -8,6 +8,7 @@ const UserService = require('../user/user-service');
 matchedRouter
   .route('/:userId')
   .get(checkUserExists, async (req, res, next) => {
+    //! This is a NAIVE implementation. It will work for our MVP, but the complexity is too high for a scalable product
     // when you get the matched endpoint it will check your matches table
     // for everyone you have matched, it will check THEIR matches table to see if you are included in them
     //  for every person who is MATCHED we will return them
