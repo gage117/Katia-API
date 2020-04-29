@@ -13,5 +13,5 @@ app.set('db', db);
 
 app.listen(PORT, () => {
   // eslint-disable-next-line no-console
-  console.log(`Server is listening at http://localhost:${PORT}`);
+  console.log(`Server is listening at ${PORT}`);
 });
