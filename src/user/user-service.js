@@ -84,7 +84,7 @@ const UserService = {
   // gets a users profile info
   getUserInfo(db, user_id) {
     return db('user_info')
-      .select('display_name', 'bio', 'lfm_in', 'avatar')
+      .select('display_name', 'bio', 'lfm_in', 'avatar', 'xbox', 'psn', 'discord', 'steam', 'other', 'nintendo')
       .where({
         user_id
       })
@@ -121,6 +121,12 @@ const UserService = {
       .where({
         user_id
       });
+  },
+
+  // returns all genres available 
+  getGenres(db) {
+    return db('user_genres')
+    .distinct(db.raw(`unnest(enum_range(NULL::genre_type))::text AS genre`))
   },
 
   // updates a users preferred genres

@@ -93,7 +93,7 @@ userRouter
 userRouter
   .route('/:userId')
   .patch(checkUserExists, bodyParser, async (req, res, next) => {
-    const {
+    let {
       display_name,
       bio,
       genres,
@@ -102,7 +102,7 @@ userRouter
       avatar
     } = req.body;
 
-    const profileToUpdate = {
+    let profileToUpdate = {
       display_name,
       bio,
       lfm_in,
@@ -129,7 +129,7 @@ userRouter
     )
       .then(user => {
         if(genres) {
-          console.log(genres)
+          console.log(genres);
           UserService.updateGenresForUser(
             req.app.get('db'),
             req.params.userId,
@@ -144,9 +144,9 @@ userRouter
           );
         }
 
-
+        // console.log({...user[0], genres: })
+        console.log({...user[0]});
         res.status(203).json(user[0]);
-
       })
       .catch(next);
   })
@@ -154,7 +154,6 @@ userRouter
     const profile = await UserService.getUserInfo(req.app.get('db'), req.params.userId);
     const genres = await UserService.getUserGenres(req.app.get('db'), req.params.userId).then(genres => genres.map(genre => genre.genre));
     const platforms = await UserService.getUserPlatforms(req.app.get('db'), req.params.userId).then(platforms => platforms.map(platform => platform.platform));
-
     res.json({
       ...UserService.serializeProfile(profile),
       lfm_in: profile.lfm_in,
@@ -201,12 +200,20 @@ userRouter
   });
 
 userRouter
+  .route('/genres/all')
+  .get((req, res, next) => {
+    UserService.getGenres(req.app.get('db'))
+      .then(genres => res.status(200).json(genres));
+  });
+
+userRouter
   .route('/:userId/avatar')
-  .post(upload.single('profileImg'), (req, res, next) => {
+  .post(checkUserExists, upload.single('profileImg'), (req, res, next) => {
     UserService.saveAvatar(req.app.get('db'), req.params.userId, req.file.location)
       .then(() => {
         res.json({ location: req.file.location });
-      });
+      })
+      .catch(next);
   });
 
 async function checkUserExists(req, res, next) {
@@ -220,7 +227,8 @@ async function checkUserExists(req, res, next) {
       res.status(404).json({
         error: 'User doesn\'t exist'
       });
-
+      
+    delete user.password;
     res.user = user;
     next();
   } catch (error) {
