@@ -17,28 +17,23 @@ matchedRouter
         req.app.get('db'),
         req.params.userId
       );
-      console.log(possibleMatches);
-      // checks each match our user has made and will see if a match exists
-      const matched = possibleMatches.filter(async possibleMatch => {
+
+      // Checks each match our user has made and will see if a match exists
+      // since filter doesnt support async functions, we do a for loop implementation
+      let matched = [];
+      for(let i=0; i < possibleMatches.length; i++) {
+        // finds out if there is a match
         const result = await MatchedService.matchExists(
             req.app.get('db'),
-            possibleMatch.match_user_id,
+            possibleMatches[i].match_user_id,
             req.params.userId  
         );
+        if(result){
+            matched.push(possibleMatches[i])
+        }
+      }
 
-        console.log(`result: ${result} ${typeof result}`);
-        return result;
-
-        // return await MatchedService.matchExists(
-        //     req.app.get('db'),
-        //     possibleMatch.match_user_id,
-        //     req.params.userId  
-        // );
-      });
-
-      console.log(`matched:`, matched);
-      //return Promise.all(matched).then(matched => res.json(matched));
-      res.json({possibleMatches});
+      res.json({matched});
 
     } catch (error) {
         next(error);
