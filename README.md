@@ -1,5 +1,5 @@
 ## Endpoints
-### This is an JSON API server, it both expects JSON and returns JSON.
+### This is a JSON API server, it both expects JSON and returns JSON.
 /auth/token
 * POST Creates an auth token. Requires valid ```email``` and ```password``` (created when you make a user account). Returns a JWT token named ```authToken```.
 
