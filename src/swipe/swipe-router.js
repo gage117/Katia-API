@@ -60,7 +60,7 @@ swipeRouter
           id
         )
           .then(() => {
-            res.status(201).end();
+            res.status(201).json('match created');
           });
       })
       .catch(next);
