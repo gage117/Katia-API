@@ -51,7 +51,7 @@ matchedRouter
         }
       }
 
-      res.json({matched});
+      res.json(matched);
 
     } catch (error) {
         next(error);
