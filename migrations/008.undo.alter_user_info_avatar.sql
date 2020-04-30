@@ -1,0 +1,2 @@
+ALTER TABLE user_info
+  ALTER COLUMN avatar DROP DEFAULT;
