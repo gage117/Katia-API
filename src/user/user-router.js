@@ -137,7 +137,6 @@ userRouter
     )
       .then(user => {
         if(genres) {
-          console.log(genres);
           UserService.updateGenresForUser(
             req.app.get('db'),
             req.params.userId,
@@ -151,9 +150,9 @@ userRouter
             platforms
           );
         }
-
-        // console.log({...user[0], genres: })
-        console.log({...user[0]});
+        user[0].genres = genres;
+        user[0].platforms = platforms;
+        console.log('Sending back: ', {...user[0]});
         res.status(203).json(user[0]);
       })
       .catch(next);
