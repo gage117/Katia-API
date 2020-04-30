@@ -57,7 +57,6 @@ userRouter
                   display_name: display_name,
                   bio: null,
                   lfm_in: null,
-                  avatar: null,
                   user_id: user.id
                 };
 
