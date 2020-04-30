@@ -152,7 +152,6 @@ userRouter
         }
         user[0].genres = genres;
         user[0].platforms = platforms;
-        console.log('Sending back: ', {...user[0]});
         res.status(203).json(user[0]);
       })
       .catch(next);
