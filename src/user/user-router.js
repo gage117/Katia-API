@@ -150,9 +150,9 @@ userRouter
             platforms
           );
         }
-
-        // console.log({...user[0], genres: })
-        console.log({...user[0]})
+        user[0].genres = genres;
+        user[0].platforms = platforms;
+        console.log('Sending back: ', {...user[0]});
         res.status(203).json(user[0]);
       })
       .catch(next);
@@ -207,11 +207,11 @@ userRouter
   });
 
 userRouter
-.route('/genres/all')
-.get((req, res, next) => {
-  UserService.getGenres(req.app.get('db'))
-  .then(genres => res.status(200).json(genres))
-})
+  .route('/genres/all')
+  .get((req, res, next) => {
+    UserService.getGenres(req.app.get('db'))
+      .then(genres => res.status(200).json(genres));
+  });
 
 userRouter
   .route('/:userId/avatar')
