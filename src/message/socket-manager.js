@@ -1,38 +1,29 @@
-const io = require('../server').io;
-const db = require('../server').db;
 const MessageService = require('./message-service');
 
-const users = {};
+const mobileSockets = {};
 
-module.exports = (socket) => {
-  socket.on('new user', (data, callback) => {
-    if(data in users) {
-      callback(false);
-    } else {
-      callback(true);
-      socket.userId = data;
-      users[socket.userId] = socket;
-      updateUsers();
-    }
+module.exports = socket => {
+  socket.on('newUser', userId => {
+    mobileSockets[userId] = socket.id;
+    socket.broadcast.emit('newUser', userId);
   });
 
-  socket.on('disconnect', (data) => {
-    if(!socket.userId) return;
-    delete users[socket.userId];
-    updateUsers();
+  socket.on('chatOpen', users => {
+    MessageService.findOrCreateConversation(users.userId, users.receiverId)
+      .then(conversation => {
+        MessageService.getMessagesForConversation(conversation.id)
+          .then(messages => {
+            socket.emit('priorMessages', messages);
+          });
+      });
   });
 
-  socket.on('send message', (data, callback) => {
-    if(data.receiver in users) {
-      users[data.receiver].emit('message received', data);
-    }
-    MessageService.saveMessage(
-      db,
-      data
-    );
+  socket.on('message', ({ text, sender_id, receiver_id }) => {
+    MessageService.createMessage(text, sender_id, receiver_id)
+      .then(message => {
+        socket.emit('incomingMessage', message);
+        const receiverSocketId = mobileSockets[receiver_id];
+        socket.to(receiverSocketId).emit('incomingMessage', message);
+      });
   });
-
-  const updateUsers = () => {
-    io.sockets.emit('users', Object.keys(users));
-  };
 };

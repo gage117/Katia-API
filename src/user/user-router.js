@@ -57,7 +57,6 @@ userRouter
                   display_name: display_name,
                   bio: null,
                   lfm_in: null,
-                  avatar: null,
                   user_id: user.id
                 };
 
@@ -190,7 +189,10 @@ userRouter
               return profile;
             });
             
-          return {...userInfo};
+          return {
+            ...userInfo,
+            user_id: match.match_user_id
+          };
         });
         Promise.all(profiles).then(profiles => res.json(UserService.serializeProfiles(profiles)));
       })

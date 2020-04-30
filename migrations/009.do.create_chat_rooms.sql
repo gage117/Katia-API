@@ -1,4 +1,0 @@
-CREATE TABLE chat_rooms (
-  id SERIAL NOT NULL PRIMARY KEY,
-  users INTEGER[]
-);

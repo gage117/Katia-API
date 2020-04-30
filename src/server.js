@@ -16,11 +16,8 @@ const db = knex({
 
 app.set('db', db);
 
-io.connection('connection', SocketManager);
+io.on('connection', SocketManager);
 
 server.listen(PORT, () => {
   console.log(`Server is listening on ${PORT}`);
 });
-
-module.exports.db = db;
-module.exports.io = io;
