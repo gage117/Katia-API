@@ -225,12 +225,11 @@ async function checkUserExists(req, res, next) {
       req.app.get('db'),
       req.params.userId
     );
-
     if(!user)
       res.status(404).json({
         error: 'User doesn\'t exist'
       });
-
+    //? Shouldn't res.user be req.user like in most middlware functions?
     res.user = user;
     next();
   } catch (error) {
