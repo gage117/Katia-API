@@ -99,14 +99,22 @@ userRouter
       genres,
       platforms,
       lfm_in,
-      avatar
+      psn,
+      xbox,
+      steam,
+      discord,
+      nintendo
     } = req.body;
 
     const profileToUpdate = {
       display_name,
       bio,
       lfm_in,
-      avatar
+      psn,
+      xbox,
+      steam,
+      discord,
+      nintendo
     };
 
     const numberOfValues = Object.values(profileToUpdate).filter(Boolean).length;
