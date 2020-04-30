@@ -66,4 +66,33 @@ swipeRouter
       .catch(next);
   });
 
+  swipeRouter
+  .route('/reject/:userId')
+  .post(bodyParser, (req, res, next) => {
+    const { id } = req.body
+
+    SwipeService.rejectExists(
+      req.app.get('db'),
+      req.params.userId,
+      id
+    )
+    .then(exists => {
+      if(exists) {
+        return res.status(400).json({
+          error: `Match already exists`
+        })
+      }
+
+      SwipeService.addRejection(
+        req.app.get('db'),
+        req.params.userId,
+        id
+      )
+      .then(() => {
+        res.status(201).json('user rejected')
+      })
+    })
+    .catch(next)
+  })
+
 module.exports = swipeRouter;

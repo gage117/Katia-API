@@ -29,7 +29,22 @@ const SwipeService = {
       .andWhere({ match_user_id })
       .first()
       .then(match => !!match);
-  }
+  },
+
+  rejectExists(db, user_id, match_user_id) {
+    return db('user_rejections')
+    .select('*')
+    .where({ user_id})
+    .andWhere({ match_user_id })
+    .first()
+    .then(match => !!match)
+  },
+
+  addRejection(db, user_id, match_user_id) {
+    return db
+    .insert({ user_id, match_user_id })
+    .into('user_rejections')
+  },
 };
 
 module.exports = SwipeService;
