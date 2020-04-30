@@ -16,7 +16,17 @@ const MatchedService = {
       .andWhere({ match_user_id })
       .first()
       .then(match => !!match);
-  }
+  },
+  // Remove a match if the user is in their own user_matches table by some error
+  //! This should never happen in normal circumstances and is almost certainly an error unless otherwise specified
+  removeSelfMatch(db, user_id) {
+    return db('user_matches')
+      .where({ user_id })
+      .andWhere('match_user_id', user_id)
+      .del();
+  },
+  // TODO
+  serializeMatched(matched){}
 };
 
 module.exports = MatchedService;

@@ -1,3 +1,7 @@
+// TODO: 1) Add validation. If somehow the user ended up matched in their own data (should NEVER happen, but might be in the seed file)
+// TODO: 2) Remove thinking.js
+// TODO: 3) Update README.md for the /matched endpoint
+// TODO: 4) Implement serializeMatched in MatchedService
 const express = require('express');
 
 const matchedRouter = express.Router();
@@ -16,37 +20,33 @@ const UserService = require('../user/user-service');
 
 matchedRouter
   .route('/:userId')
-  .get(validateUserId, async (req, res, next) => {
+  .get(validateUserId, checkUserExists, async (req, res, next) => {
     // When you get the matched endpoint it will check your matches table
     // for everyone you have matched, it will check THEIR matches table to see if you are included in them
-    //  for every person who is MATCHED we will return them
+    // for every person who is MATCHED we will return them
     try{
       const possibleMatches = await MatchedService.getUserMatches(
         req.app.get('db'),
-        req.user.id
+        req.params.userId
       );
-    //   console.log('req.user is: ', req.user);
-    //   console.log('typeof req.user.id is: ', typeof req.user.id);
-    //   console.log('req.params.userId is: ', req.params.userId);
-    //   console.log('typeof req.params.userId is: ', typeof req.params.userId);
-    //   console.log(possibleMatches);
-
       // Checks each match our user has made and will see if a match exists
       // since filter doesnt support async functions, we do a for loop implementation
-      // TODO: 1) Add validation. If someone the user ended up matched in their own data (should NEVER happen, but might be in the seed file)
-      // TODO: 2) Remove thinking.js
-      // TODO: 3) Update README.md for the /matched endpoint
       let matched = [];
       for(let i=0; i < possibleMatches.length; i++) {
-        // finds out if there is a match
         const result = await MatchedService.matchExists(
             req.app.get('db'),
             possibleMatches[i].match_user_id,
             req.params.userId  
         );
-        // && req.params.userId !== possibleMatches[i].match_user_id
-        if(result ){
-            matched.push(possibleMatches[i])
+        // If the user is somehow matched with themself, remove that entry from the database
+        if(possibleMatches[i].match_user_id === req.params.userId) {
+            await MatchedService.removeSelfMatch(
+                req.app.get('db'),
+                req.params.userId
+            );
+        }
+        if(result && possibleMatches[i].match_user_id !== req.params.userId){
+            matched.push(possibleMatches[i]);
         }
       }
 
@@ -79,18 +79,29 @@ matchedRouter
           error: 'userId must be a positive integer'
         });
       }
-      // check if that user exists in the database
+
+      // After req.params.userId has been validated and converted from a string to number, we pass that on
+      req.params.userId = userId;
+      next();
+    } catch (error) {
+      next(error);
+    }
+  }
+
+
+  async function checkUserExists(req, res, next) {
+    try {
       const user = await UserService.getById(
         req.app.get('db'),
-        userId
+        req.params.userId
       );
-        
+
       if(!user) {
         return res.status(404).json({
-          error: 'User doesn\'t exist' // if you don't use brackets and explicitly return you get errors from the server in console - not ideal
+          error: 'User doesn\'t exist'
         });
       }
-      // if the user does exist, pass it along so you don't have to pull it from the database again
+
       req.user = user;
       next();
     } catch (error) {
