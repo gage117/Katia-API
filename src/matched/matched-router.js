@@ -1,4 +1,4 @@
-// TODO: 1) Add validation. If somehow the user ended up matched in their own data (should NEVER happen, but might be in the seed file)
+//! DONE TODO: 1) Add validation. If somehow the user ended up matched in their own data (should NEVER happen, but might be in the seed file)
 // TODO: 2) Remove thinking.js
 // TODO: 3) Update README.md for the /matched endpoint
 // TODO: 4) Implement serializeMatched in MatchedService
@@ -46,7 +46,17 @@ matchedRouter
             );
         }
         if(result && possibleMatches[i].match_user_id !== req.params.userId){
-            matched.push(possibleMatches[i]);
+          // get the profile information of the matched user
+          const profile = await MatchedService.getUserInfo(req.app.get('db'), possibleMatches[i].match_user_id);
+          const genres = await UserService.getUserGenres(req.app.get('db'), possibleMatches[i].match_user_id).then(genres => genres.map(genre => genre.genre));
+          const platforms = await UserService.getUserPlatforms(req.app.get('db'), possibleMatches[i].match_user_id).then(platforms => platforms.map(platform => platform.platform));
+
+          matched.push({
+            ...UserService.serializeProfile(profile),
+            lfm_in: profile.lfm_in,
+            genres,
+            platforms
+          });
         }
       }
 
@@ -90,6 +100,7 @@ matchedRouter
 
 
   async function checkUserExists(req, res, next) {
+    
     try {
       const user = await UserService.getById(
         req.app.get('db'),
