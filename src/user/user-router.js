@@ -57,7 +57,6 @@ userRouter
                   display_name: display_name,
                   bio: null,
                   lfm_in: null,
-                  avatar: null,
                   user_id: user.id
                 };
 
@@ -152,7 +151,6 @@ userRouter
         }
         user[0].genres = genres;
         user[0].platforms = platforms;
-        console.log('Sending back: ', {...user[0]});
         res.status(203).json(user[0]);
       })
       .catch(next);
@@ -229,7 +227,6 @@ async function checkUserExists(req, res, next) {
       req.app.get('db'),
       req.params.userId
     );
-
     if(!user)
       res.status(404).json({
         error: 'User doesn\'t exist'

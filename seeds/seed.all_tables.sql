@@ -22,19 +22,19 @@ VALUES
   ('gamesrfun@test.com', '$2a$12$Pkxp8JTF90HG6gYbIKJiiuzPjBHSOcpe1oUY6c1ESHcZ0ISUHmm0K'),    
   ('player1@test.com', '$2a$12$Pkxp8JTF90HG6gYbIKJiiuzPjBHSOcpe1oUY6c1ESHcZ0ISUHmm0K');
 
-INSERT INTO user_info (display_name, bio, lfm_in, avatar, user_id)
+INSERT INTO user_info (display_name, bio, lfm_in, avatar, xbox, psn, nintendo, discord, steam, other, user_id)
 VALUES
-  ('gamerdude22', 'I like games dude', 'Fortnite,COD Warzone,Overwatch', '<base64 string here>', 1),
-  ('lonelygamer69', 'I need friends', 'Minecraft,Rust,Ark', '<base64 string here>', 2),
-  ('player63', 'I like playing games', 'COD Warzone,Fortnite,CSGO', '<base64 string here>', 3),
-  ('iliketrains', 'I like trains', 'Fortnite,Apex Legends,COD Warzone', '<base64 string here>', 4),
-  ('player3', 'I like playing games', 'CSGO,Overwatch,COD Modern Warfare', '<base64 string here>', 5),
-  ('yellowbanana', 'I like bananas', 'COD Modern Warfare,Destiny 2,Overwatch', '<base64 string here>', 6),
-  ('yikes', 'oof', 'Destiny 2,Overwatch,Minecraft', '<base64 string here>', 7),
-  ('idkwhatimdoing', 'what is going on', 'COD Warzone,Fortnite,Apex Legends', '<base64 string here>', 8),
-  ('gaming4life', 'gaming is life', 'CSGO,COD Modern Warfare', '<base64 string here>', 9),
-  ('gamesrfun', 'games are fun', 'Fortnite,Apex Legends,COD Warzone', '<base64 string here>', 10),
-  ('player1', 'i like playing', 'Minecraft,Conan Exiles,Rust', '<base64 string here>', 11);
+  ('gamerdude22', 'I like games dude', 'Fortnite,COD Warzone,Overwatch', 'https://katia-app.s3-us-west-1.amazonaws.com/default_avatar.png', 'gamerdude22', null, null, 'gamerdude22#1277', 'gamerdude22', 'BattleNet: gamerdude22#3572', 1),
+  ('lonelygamer69', 'I need friends', 'Minecraft,Rust,Ark', 'https://katia-app.s3-us-west-1.amazonaws.com/default_avatar.png', null, 'lonelygamer', null, 'lonelygamer#1872', 'lonelygamer', null, 2),
+  ('player63', 'I like playing games', 'COD Warzone,Fortnite,CSGO', 'https://katia-app.s3-us-west-1.amazonaws.com/default_avatar.png', null, null, 'player63', 'player63#9763', 'player63', null, 3),
+  ('iliketrains', 'I like trains', 'Fortnite,Apex Legends,COD Warzone', 'https://katia-app.s3-us-west-1.amazonaws.com/default_avatar.png', 'iliketrains', 'iliketrains', null, null, null, null, 4),
+  ('player3', 'I like playing games', 'Overwatch,COD Modern Warfare', 'https://katia-app.s3-us-west-1.amazonaws.com/default_avatar.png', null, 'player3', null, 'player3#4578', 'player3', null, 5),
+  ('yellowbanana', 'I like bananas', 'COD Modern Warfare,Destiny 2,Overwatch', 'https://katia-app.s3-us-west-1.amazonaws.com/default_avatar.png', 'yellowbanana', 'yellowbanana', null, 'yellowbanana#1277', 'yellowbanana', 'BattleNet: yellowbanana#9874', 6),
+  ('yikes', 'oof', 'Destiny 2,Overwatch,Minecraft', 'https://katia-app.s3-us-west-1.amazonaws.com/default_avatar.png', null, 'yikes', null, null, null, 'BattleNet: yikes#8745', 7),
+  ('idkwhatimdoing', 'what is going on', 'COD Warzone,Fortnite,Apex Legends', 'https://katia-app.s3-us-west-1.amazonaws.com/default_avatar.png', 'idkwhatimdoing', 'idkwhatimdoing', 'idkwhatimdoing', null, null, null, 8),
+  ('gaming4life', 'gaming is life', 'CSGO,COD Modern Warfare', 'https://katia-app.s3-us-west-1.amazonaws.com/default_avatar.png', null, 'gaming4life', null, 'gaming4life#7434', null, 'Epic Games: gaming4life', 9),
+  ('gamesrfun', 'games are fun', 'Fortnite,Apex Legends,COD Warzone', 'https://katia-app.s3-us-west-1.amazonaws.com/default_avatar.png', null, null, null, 'gamesrfun#1867', 'gamesrfun', 'Epic Games: gamesrfun', 10),
+  ('player1', 'i like playing', 'Minecraft,Conan Exiles,Rust', 'https://katia-app.s3-us-west-1.amazonaws.com/default_avatar.png', 'player1', 'player1', null, null, null, null, 11);
 
 INSERT INTO user_genres (user_id, genre)
 VALUES
