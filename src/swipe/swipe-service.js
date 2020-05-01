@@ -1,10 +1,49 @@
 const SwipeService = {
-  getQueueForUser(db, userId) {
+  // getQueueForUser(db, userId) {
+  //   return db
+  //     .select('id', 'display_name', 'bio', 'lfm_in', 'avatar')
+  //     .from('users')
+  //     .innerJoin('user_info', 'users.id', 'user_info.user_id')
+  //     .whereNot('users.id', userId);
+  // },
+
+  getMatchesTableInfo(db, userId) {
     return db
       .select('id', 'display_name', 'bio', 'lfm_in', 'avatar')
       .from('users')
       .innerJoin('user_info', 'users.id', 'user_info.user_id')
-      .whereNot('users.id', userId);
+      .innerJoin('user_matches', 'users.id', 'user_matches.match_user_id')
+      .where('user_matches.user_id', userId)
+        // .then(users => {
+        // return db
+        // .select('id', 'display_name', 'bio', 'lfm_in', 'avatar')
+        // .from('users')
+        // .innerJoin('user_info', 'users.id', 'user_info.user_id')
+        // .whereNot('users.id', ...users.map(item => item.id))
+        // .andWhereNot('users.id', userId)
+
+        // .select('id', 'display_name', 'bio', 'lfm_in', 'avatar')
+        // .from('users')
+        // .innerJoin('user_info', 'users.id', 'user_info.user_id')
+        // .innerJoin('user_rejections', 'users.id', 'user_rejections.match_user_id')
+        // .where('user_rejections.user_id', userId)
+  },
+
+  getRejectionsTableInfo(db, userId) {
+    return db
+      .select('id', 'display_name', 'bio', 'lfm_in', 'avatar')
+      .from('users')
+      .innerJoin('user_info', 'users.id', 'user_info.user_id')
+      .innerJoin('user_rejections', 'users.id', 'user_rejections.match_user_id')
+      .where('user_rejections.user_id', userId)
+  },
+
+  getAllUsers(db, userId) {
+    return db
+    .select('id', 'display_name', 'bio', 'lfm_in', 'avatar')
+    .from('users')
+    .innerJoin('user_info', 'users.id', 'user_info.user_id')
+    .whereNot('users.id', userId)
   },
 
   // gets a users matches
