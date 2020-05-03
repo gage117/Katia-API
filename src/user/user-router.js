@@ -92,20 +92,28 @@ userRouter
 userRouter
   .route('/:userId')
   .patch(checkUserExists, bodyParser, async (req, res, next) => {
-    const {
+    let {
       display_name,
       bio,
       genres,
       platforms,
       lfm_in,
-      avatar
+      psn,
+      xbox,
+      steam,
+      discord,
+      nintendo
     } = req.body;
 
-    const profileToUpdate = {
+    let profileToUpdate = {
       display_name,
       bio,
       lfm_in,
-      avatar
+      psn,
+      xbox,
+      steam,
+      discord,
+      nintendo
     };
 
     const numberOfValues = Object.values(profileToUpdate).filter(Boolean).length;
@@ -128,21 +136,10 @@ userRouter
     )
       .then(user => {
         if(genres) {
-          let genresArr = genres.split(',');
-          for (let i = 0; i < genresArr.length; i++) {
-            let genreName = genresArr[i];
-            while (genreName[0] === ' ') { // Removes any spaces at the beginning of the name
-              genreName = genreName.slice(1);
-            }
-            while (genreName[genreName.length - 1] === ' ') { // Removes any spaces at the end of the name
-              genreName = genreName.slice(genreName.length - 1);
-            }
-            genresArr[i] = genreName;
-          }
           UserService.updateGenresForUser(
             req.app.get('db'),
             req.params.userId,
-            genresArr
+            genres
           );
         }
         if(platforms) {
@@ -152,18 +149,16 @@ userRouter
             platforms
           );
         }
-
-
+        user[0].genres = genres;
+        user[0].platforms = platforms;
         res.status(203).json(user[0]);
-
       })
       .catch(next);
   })
-  .get(checkUserExists, async (req, res) => {
-    const profile = await UserService.getUserInfo(req.app.get('db'), req.params.userId);
-    const genres = await UserService.getUserGenres(req.app.get('db'), req.params.userId).then(genres => genres.map(genre => genre.genre));
-    const platforms = await UserService.getUserPlatforms(req.app.get('db'), req.params.userId).then(platforms => platforms.map(platform => platform.platform));
-
+  .get(checkUserExists, async (req, res, next) => {
+    const profile = await UserService.getUserInfo(req.app.get('db'), req.params.userId).catch(next);
+    const genres = await UserService.getUserGenres(req.app.get('db'), req.params.userId).then(genres => genres.map(genre => genre.genre)).catch(next);
+    const platforms = await UserService.getUserPlatforms(req.app.get('db'), req.params.userId).then(platforms => platforms.map(platform => platform.platform)).catch(next);
     res.json({
       ...UserService.serializeProfile(profile),
       lfm_in: profile.lfm_in,
@@ -213,12 +208,21 @@ userRouter
   });
 
 userRouter
+  .route('/genres/all')
+  .get((req, res, next) => {
+    UserService.getGenres(req.app.get('db'))
+      .then(genres => res.status(200).json(genres))
+      .catch(next);
+  });
+
+userRouter
   .route('/:userId/avatar')
-  .post(upload.single('profileImg'), (req, res, next) => {
+  .post(checkUserExists, upload.single('profileImg'), (req, res, next) => {
     UserService.saveAvatar(req.app.get('db'), req.params.userId, req.file.location)
       .then(() => {
         res.json({ location: req.file.location });
-      });
+      })
+      .catch(next);
   });
 
 async function checkUserExists(req, res, next) {
@@ -227,12 +231,12 @@ async function checkUserExists(req, res, next) {
       req.app.get('db'),
       req.params.userId
     );
-
     if(!user)
       res.status(404).json({
         error: 'User doesn\'t exist'
       });
-
+      
+    delete user.password;
     res.user = user;
     next();
   } catch (error) {

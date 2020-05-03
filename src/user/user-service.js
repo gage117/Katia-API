@@ -84,7 +84,7 @@ const UserService = {
   // gets a users profile info
   getUserInfo(db, user_id) {
     return db('user_info')
-      .select('display_name', 'bio', 'lfm_in', 'avatar')
+      .select('display_name', 'bio', 'lfm_in', 'avatar', 'xbox', 'psn', 'nintendo', 'steam', 'discord', 'other')
       .where({
         user_id
       })
@@ -121,6 +121,12 @@ const UserService = {
       .where({
         user_id
       });
+  },
+
+  // returns all genres available 
+  getGenres(db) {
+    return db('user_genres')
+      .distinct(db.raw(`unnest(enum_range(NULL::genre_type))::text AS genre`));
   },
 
   // updates a users preferred genres
@@ -233,7 +239,13 @@ const UserService = {
       display_name: xss(user.display_name),
       bio: xss(user.bio),
       lfm_in: xss(user.lfm_in),
-      avatar: user.avatar
+      avatar: user.avatar,
+      xbox: xss(user.xbox),
+      psn: xss(user.psn),
+      nintendo: xss(user.nintendo),
+      steam: xss(user.steam),
+      discord: xss(user.discord),
+      other: xss(user.other)
     };
   },
 
@@ -249,7 +261,13 @@ const UserService = {
       display_name: xss(profile.display_name),
       bio: xss(profile.bio),
       lfm_in: xss(profile.lfm_in),
-      avatar: profile.avatar
+      avatar: profile.avatar,
+      xbox: xss(profile.xbox),
+      psn: xss(profile.psn),
+      nintendo: xss(profile.nintendo),
+      steam: xss(profile.steam),
+      discord: xss(profile.discord),
+      other: xss(profile.other)
     };
   }
 };
