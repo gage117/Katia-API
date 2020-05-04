@@ -1,6 +1,7 @@
 require('dotenv').config();
 
 const knex = require('knex');
+const cors = require('cors');
 const app = require('./app');
 const server = require('http').createServer(app);
 const io = require('socket.io').listen(server);
@@ -15,6 +16,8 @@ const db = knex({
 });
 
 app.set('db', db);
+
+io.use(cors());
 
 io.on('connection', SocketManager);
 
