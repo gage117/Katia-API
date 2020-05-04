@@ -1,10 +1,19 @@
 require('dotenv').config();
 
 const knex = require('knex');
-const cors = require('cors');
 const app = require('./app');
 const server = require('http').createServer(app);
-const io = require('socket.io').listen(server);
+const io = require('socket.io').listen(server, {
+  handlePreflightRequest: (req, res) => {
+    const headers = {
+      'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+      'Access-Control-Allow-Origin': req.headers.origin,
+      'Access-Control-Allow-Credentials': true
+    };
+    res.writeHead(200, headers);
+    res.end();
+  }
+});
 
 const SocketManager = require('./message/socket-manager');
 
@@ -16,8 +25,6 @@ const db = knex({
 });
 
 app.set('db', db);
-
-io.use(cors());
 
 io.on('connection', SocketManager);
 

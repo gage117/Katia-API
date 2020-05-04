@@ -3,6 +3,8 @@ const MessageService = require('./message-service');
 const mobileSockets = {};
 
 module.exports = socket => {
+  console.log('Socket.IO listening...');
+
   socket.on('newUser', userId => {
     mobileSockets[userId] = socket.id;
     socket.broadcast.emit('newUser', userId);
