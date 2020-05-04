@@ -89,21 +89,24 @@ async function validateUserId(req, res, next) {
   }
 }
 
-
+// Check if a user exists in DB
 async function checkUserExists(req, res, next) {
     
   try {
+    // Get a user by given ID
     const user = await UserService.getById(
       req.app.get('db'),
       req.params.userId
     );
 
+    // If no user exists, return 404
     if(!user) {
       return res.status(404).json({
         error: 'User doesn\'t exist'
       });
     }
 
+    // Set the user object in the req
     req.user = user;
     next();
   } catch (error) {
