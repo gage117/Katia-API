@@ -155,10 +155,10 @@ userRouter
       })
       .catch(next);
   })
-  .get(checkUserExists, async (req, res) => {
-    const profile = await UserService.getUserInfo(req.app.get('db'), req.params.userId);
-    const genres = await UserService.getUserGenres(req.app.get('db'), req.params.userId).then(genres => genres.map(genre => genre.genre));
-    const platforms = await UserService.getUserPlatforms(req.app.get('db'), req.params.userId).then(platforms => platforms.map(platform => platform.platform));
+  .get(checkUserExists, async (req, res, next) => {
+    const profile = await UserService.getUserInfo(req.app.get('db'), req.params.userId).catch(next);
+    const genres = await UserService.getUserGenres(req.app.get('db'), req.params.userId).then(genres => genres.map(genre => genre.genre)).catch(next);
+    const platforms = await UserService.getUserPlatforms(req.app.get('db'), req.params.userId).then(platforms => platforms.map(platform => platform.platform)).catch(next);
     res.json({
       ...UserService.serializeProfile(profile),
       lfm_in: profile.lfm_in,
@@ -184,7 +184,10 @@ userRouter
               return profile;
             });
             
-          return {...userInfo};
+          return {
+            ...userInfo,
+            user_id: match.match_user_id
+          };
         });
         Promise.all(profiles).then(profiles => res.json(UserService.serializeProfiles(profiles)));
       })
@@ -208,7 +211,8 @@ userRouter
   .route('/genres/all')
   .get((req, res, next) => {
     UserService.getGenres(req.app.get('db'))
-      .then(genres => res.status(200).json(genres));
+      .then(genres => res.status(200).json(genres))
+      .catch(next);
   });
 
 userRouter

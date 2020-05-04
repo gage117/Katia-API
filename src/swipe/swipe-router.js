@@ -10,22 +10,22 @@ swipeRouter
     let rejections = await SwipeService.getRejectionsTableInfo(
       req.app.get('db'),
       req.params.userId
-    )
+    );
     let matches = await SwipeService.getMatchesTableInfo(
       req.app.get('db'),
       req.params.userId
-    )
-    let allSwiped = [...matches, ...rejections].map(item => item.id)
+    );
+    let allSwiped = [...matches, ...rejections].map(item => item.id);
 
     let allUsers = await SwipeService.getAllUsers(
       req.app.get('db'),
       req.params.userId
-    )    
-    let allUsersFiltered = allUsers.filter(item => !allSwiped.includes(item.id))
+    );    
+    let allUsersFiltered = allUsers.filter(item => !allSwiped.includes(item.id));
 
     const queue = allUsersFiltered.map(async (user) => {
-    const genres = await UserService.getUserGenres(req.app.get('db'), user.id).then(genres => genres.map(genre => genre.genre));
-    const platforms = await UserService.getUserPlatforms(req.app.get('db'), user.id).then(platforms => platforms.map(platform => platform.platform));
+      const genres = await UserService.getUserGenres(req.app.get('db'), user.id).then(genres => genres.map(genre => genre.genre));
+      const platforms = await UserService.getUserPlatforms(req.app.get('db'), user.id).then(platforms => platforms.map(platform => platform.platform));
 
       return {
         ...user,
@@ -35,7 +35,7 @@ swipeRouter
     });
 
     Promise.all(queue).then((queue) => res.json({ queue }))
-    .catch(next)
+      .catch(next);
   })
 
   .post(bodyParser, (req, res, next) => {
@@ -65,33 +65,33 @@ swipeRouter
       .catch(next);
   });
 
-  swipeRouter
+swipeRouter
   .route('/reject/:userId')
   .post(bodyParser, (req, res, next) => {
-    const { id } = req.body
+    const { id } = req.body;
 
     SwipeService.rejectExists(
       req.app.get('db'),
       req.params.userId,
       id
     )
-    .then(exists => {
-      if(exists) {
-        return res.status(400).json({
-          error: `Match already exists`
-        })
-      }
+      .then(exists => {
+        if(exists) {
+          return res.status(400).json({
+            error: 'Match already exists'
+          });
+        }
 
-      SwipeService.addRejection(
-        req.app.get('db'),
-        req.params.userId,
-        id
-      )
-      .then(() => {
-        res.status(201).json('user rejected')
+        SwipeService.addRejection(
+          req.app.get('db'),
+          req.params.userId,
+          id
+        )
+          .then(() => {
+            res.status(201).json('user rejected');
+          });
       })
-    })
-    .catch(next)
-  })
+      .catch(next);
+  });
 
 module.exports = swipeRouter;
