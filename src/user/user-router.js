@@ -7,6 +7,8 @@ const UserService = require('./user-service');
 const userRouter = express.Router();
 const bodyParser = express.json();
 
+const { requireAuth } = require('../middleware/jwt-auth');
+
 userRouter
   .route('/')
   // Endpoint for registering a user
@@ -96,7 +98,7 @@ userRouter
       .catch(next);
   })
   // Endpoint for getting all Registered User Profiles
-  .get((req, res, next) => {
+  .get(requireAuth, (req, res, next) => {
     // Get all Profiles from DB
     UserService.getAllProfiles(req.app.get('db'))
       .then(profiles => {
@@ -110,7 +112,7 @@ userRouter
 userRouter
   .route('/:userId')
   // Endpoint for updating a users profile information
-  .patch(checkUserExists, bodyParser, async (req, res, next) => {
+  .patch(requireAuth, checkUserExists, bodyParser, async (req, res, next) => {
     // Get profile info from request
     let {
       display_name,
@@ -184,7 +186,7 @@ userRouter
       .catch(next);
   })
   // Route for getting a user profile
-  .get(checkUserExists, async (req, res, next) => {
+  .get(requireAuth, checkUserExists, async (req, res, next) => {
     // Get userId from request params
     const { userId } = req.params;
     // Get knex instance from app
@@ -209,7 +211,7 @@ userRouter
 userRouter
   .route('/genres/all')
   // Endpoint for getting all available genres
-  .get((req, res, next) => {
+  .get(requireAuth, (req, res, next) => {
     // Get all genre types created in DB
     UserService.getGenres(req.app.get('db'))
       // Return array of all genres
@@ -221,7 +223,7 @@ userRouter
 userRouter
   .route('/:userId/avatar')
   // Endpoint for updating a users avatar using multer middleware
-  .post(checkUserExists, upload.single('profileImg'), (req, res, next) => {
+  .post(requireAuth, checkUserExists, upload.single('profileImg'), (req, res, next) => {
     // Save the returned multer upload location to the DB
     UserService.saveAvatar(req.app.get('db'), req.params.userId, req.file.location)
       .then(() => {

@@ -1,6 +1,9 @@
 const express = require('express');
 const swipeRouter = express.Router();
 const bodyParser = express.json();
+
+const { requireAuth } = require('../middleware/jwt-auth');
+
 const SwipeService = require('./swipe-service');
 const UserService = require('../user/user-service');
 
@@ -8,7 +11,7 @@ const UserService = require('../user/user-service');
 swipeRouter
   .route('/:userId')
   // Endpoint for getting a users "Swipe Queue"
-  .get(async (req, res, next) => {
+  .get(requireAuth, async (req, res, next) => {
     // Get user rejections from DB
     let rejections = await SwipeService.getRejectionsTableInfo(
       req.app.get('db'),
@@ -52,7 +55,7 @@ swipeRouter
   })
 
   // Endpoint for Posting a "Swipe" action
-  .post(bodyParser, (req, res, next) => {
+  .post(requireAuth, bodyParser, (req, res, next) => {
     // Get the id of swiped user from requesdt
     const { id } = req.body;
 
@@ -89,7 +92,7 @@ swipeRouter
 swipeRouter
   .route('/:userId/reject')
   // Post a reject action
-  .post(bodyParser, (req, res, next) => {
+  .post(requireAuth, bodyParser, (req, res, next) => {
     // Get swiped users id from request
     const { id } = req.body;
 

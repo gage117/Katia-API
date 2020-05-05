@@ -4,6 +4,8 @@ const express = require('express');
 
 const matchedRouter = express.Router();
 
+const { requireAuth } = require('../middleware/jwt-auth');
+
 const MatchedService = require('./matched-service');
 const UserService = require('../user/user-service');
 
@@ -11,7 +13,7 @@ const UserService = require('../user/user-service');
 
 matchedRouter
   .route('/:userId')
-  .get(validateUserId, checkUserExists, async (req, res, next) => {
+  .get(requireAuth, validateUserId, checkUserExists, async (req, res, next) => {
     // When you get the matched endpoint it will check your matches table
     // for everyone you have matched, it will check THEIR matches table to see if you are included in them
     // for every person who is MATCHED we will return them
