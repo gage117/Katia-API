@@ -7,10 +7,10 @@ const MatchedService = {
         user_id
       });
   },
-  // TODO add GamerID when it gets added to the DB
   getUserInfo(db, user_id) {
     return db('user_info')
-      .select('user_id', 'display_name', 'bio', 'lfm_in', 'avatar')
+      .select('user_id', 'display_name', 'bio', 'lfm_in', 'avatar', 'xbox', 'psn', 'nintendo', 'steam', 'discord', 'other')
+      
       .where({
         user_id
       })
