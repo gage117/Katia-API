@@ -68,12 +68,12 @@ const UserService = {
   // update an existing user
   updateUser(db, id, newUserFields) {
     return db('user_info')
-      // .innerJoin('users', 'user_info.user_id', 'users.id')
       .where('user_info.user_id', id)
       .update(newUserFields)
       .returning('*');
   },
 
+  // update a user's avatar url location
   saveAvatar(db, user_id, imageLocation) {
     return db('user_info')
       .where({ user_id })
@@ -91,29 +91,6 @@ const UserService = {
       .first();
   },
 
-  // insert a match for a user
-  insertMatch(db, user_id, match_user_id) {
-    return db
-      .insert({ user_id, match_user_id })
-      .into('user_matches')
-      .returning('*')
-      .then(([match]) => match);
-  },
-
-  // remove a match
-  removeMatch(db, user_id, match_user_id) {
-    return db('user_matches')
-      .where({ user_id })
-      .andWhere({ match_user_id })
-      .del()
-      .then(() => {
-        return db('user_matches')
-          .where({ user_id: match_user_id })
-          .andWhere({ match_user_id: user_id })
-          .del();
-      });
-  },
-
   // gets a users preferred genres
   getUserGenres(db, user_id) {
     return db('user_genres')
@@ -126,7 +103,7 @@ const UserService = {
   // returns all genres available 
   getGenres(db) {
     return db('user_genres')
-      .distinct(db.raw(`unnest(enum_range(NULL::genre_type))::text AS genre`));
+      .distinct(db.raw('unnest(enum_range(NULL::genre_type))::text AS genre'));
   },
 
   // updates a users preferred genres

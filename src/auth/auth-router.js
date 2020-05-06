@@ -1,17 +1,19 @@
 const express = require('express');
 const AuthService = require('./auth-service');
-const UserService = require('../user/user-service');
 const { requireAuth } = require('../middleware/jwt-auth');
 
 const authRouter = express.Router();
 const jsonBodyParser = express.json();
 
+// Route for authenticating a user login request
 authRouter
   .route('/token')
   .post(jsonBodyParser, async (req, res, next) => {
+    // Required values are email and password
     const { email, password } = req.body;
     const loginUser = { email, password };
 
+    // Check if any value is missing
     for (const [key, value] of Object.entries(loginUser))
       if (value == null)
         return res.status(400).json({
@@ -19,38 +21,36 @@ authRouter
         });
 
     try {
+      // Check if user with email exists
       const dbUser = await AuthService.getUserWithEmail(
         req.app.get('db'),
         loginUser.email
       );
 
+      // If no user exists, return 400
       if (!dbUser)
         return res.status(400).json({
           error: 'Incorrect username or password',
         });
 
+      // Check if passwords match
       const compareMatch = await AuthService.comparePasswords(
         loginUser.password,
         dbUser.password
       );
 
+      // If passwords don't match return 400
       if (!compareMatch)
         return res.status(400).json({
           error: 'Incorrect username or password',
         });
 
+      // Create JWT sub and payload
       const sub = dbUser.email;
-
-      // const profile = await UserService.getUserInfo(req.app.get('db'), dbUser.id);
-      // const genres = await UserService.getUserGenres(req.app.get('db'), dbUser.id).then(genres => genres.map(genre => genre.genre));
-      // const platforms = await UserService.getUserPlatforms(req.app.get('db'), dbUser.id).then(platforms => platforms.map(platform => platform.platform));
-
       const payload = {
-        id: dbUser.id,
-        // ...profile,
-        // genres,
-        // platforms
+        id: dbUser.id
       };
+      // Return created JWT
       res.send({
         authToken: AuthService.createJwt(sub, payload),
       });
@@ -59,31 +59,17 @@ authRouter
     }
   })
 
+  // Route for refreshing a users token
   .put(requireAuth, (req, res) => {
+    // Create JWT sub and payload
     const sub = req.user.email;
     const payload = {
       user_id: req.user.id
     };
+    // Return created JWT
     res.send({
       authToken: AuthService.createJwt(sub, payload),
     });
   });
-
-  // .put( async (req, res) => {
-  //   const sub = req.user.email;
-  //   const profile = await UserService.getUserInfo(req.app.get('db'), dbUser.id);
-  //   const genres = await UserService.getUserGenres(req.app.get('db'), dbUser.id).then(genres => genres.map(genre => genre.genre));
-  //   const platforms = await UserService.getUserPlatforms(req.app.get('db'), dbUser.id).then(platforms => platforms.map(platform => platform.platform));
-
-  //   const payload = {
-  //     id: req.user.id,
-  //     ...profile,
-  //     genres,
-  //     platforms
-  //   };
-  //   res.send({
-  //     authToken: AuthService.createJwt(sub, payload),
-  //   });
-  // });
 
 module.exports = authRouter;

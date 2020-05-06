@@ -25,16 +25,16 @@ matchedRouter
       let matched = [];
       for(let i=0; i < possibleMatches.length; i++) {
         const result = await MatchedService.matchExists(
-            req.app.get('db'),
-            possibleMatches[i].match_user_id,
-            req.params.userId  
+          req.app.get('db'),
+          possibleMatches[i].match_user_id,
+          req.params.userId  
         );
         // If the user is somehow matched with themself, remove that entry from the database
         if(possibleMatches[i].match_user_id === req.params.userId) {
-            await MatchedService.removeSelfMatch(
-                req.app.get('db'),
-                req.params.userId
-            );
+          await MatchedService.removeSelfMatch(
+            req.app.get('db'),
+            req.params.userId
+          );
         }
         if(result && possibleMatches[i].match_user_id !== req.params.userId){
           // get the profile information of the matched user
@@ -54,61 +54,64 @@ matchedRouter
       res.json(matched);
 
     } catch (error) {
-        next(error);
+      next(error);
     }
 
   });
 
 
-  async function validateUserId(req, res, next) {
-    try {
-      let { userId } = req.params;
-      userId = Number(userId);
+async function validateUserId(req, res, next) {
+  try {
+    let { userId } = req.params;
+    userId = Number(userId);
 
-      // If userId is not a number
-      if(!Number(req.params.userId)) {
-        return res.status(400).json({ error: 'userId must be an number'});
-      }
-      // If userId is greater than 2^53 - 1 or not an integer
-      if(!Number.isSafeInteger(userId)){
-        return res.status(400).json({
-          error: 'userId must be a safe integer'
-        });
-      }
-      if(userId < 0) {
-        return res.status(400).json({
-          error: 'userId must be a positive integer'
-        });
-      }
-
-      // After req.params.userId has been validated and converted from a string to number, we pass that on
-      req.params.userId = userId;
-      next();
-    } catch (error) {
-      next(error);
+    // If userId is not a number
+    if(!Number(req.params.userId)) {
+      return res.status(400).json({ error: 'userId must be an number'});
     }
+    // If userId is greater than 2^53 - 1 or not an integer
+    if(!Number.isSafeInteger(userId)){
+      return res.status(400).json({
+        error: 'userId must be a safe integer'
+      });
+    }
+    if(userId < 0) {
+      return res.status(400).json({
+        error: 'userId must be a positive integer'
+      });
+    }
+
+    // After req.params.userId has been validated and converted from a string to number, we pass that on
+    req.params.userId = userId;
+    next();
+  } catch (error) {
+    next(error);
   }
+}
 
-
-  async function checkUserExists(req, res, next) {
+// Check if a user exists in DB
+async function checkUserExists(req, res, next) {
     
-    try {
-      const user = await UserService.getById(
-        req.app.get('db'),
-        req.params.userId
-      );
+  try {
+    // Get a user by given ID
+    const user = await UserService.getById(
+      req.app.get('db'),
+      req.params.userId
+    );
 
-      if(!user) {
-        return res.status(404).json({
-          error: 'User doesn\'t exist'
-        });
-      }
-
-      req.user = user;
-      next();
-    } catch (error) {
-      next(error);
+    // If no user exists, return 404
+    if(!user) {
+      return res.status(404).json({
+        error: 'User doesn\'t exist'
+      });
     }
+
+    // Set the user object in the req
+    req.user = user;
+    next();
+  } catch (error) {
+    next(error);
   }
+}
 
 module.exports = matchedRouter;
