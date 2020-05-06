@@ -102,7 +102,8 @@ userRouter
       xbox,
       steam,
       discord,
-      nintendo
+      nintendo,
+      other
     } = req.body;
 
     let profileToUpdate = {
@@ -113,7 +114,8 @@ userRouter
       xbox,
       steam,
       discord,
-      nintendo
+      nintendo,
+      other
     };
 
     const numberOfValues = Object.values(profileToUpdate).filter(Boolean).length;
