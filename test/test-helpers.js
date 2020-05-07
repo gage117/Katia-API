@@ -1,6 +1,7 @@
 const knex = require('knex');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+// TODO makeMatches
 
 /**
  * create a knex instance connected to postgres
@@ -68,7 +69,50 @@ function makeUserInfoAndPlatformsAndGenres(user) {
 function makeAuthHeader(user, secret = process.env.JWT_SECRET) {
   const token = jwt.sign({ user_id: user.id }, secret, {
     subject: user.username,
-    algorithm: 'HS256',
+    algorithm: 'HS256'
   });
   return `Bearer ${token}`;
 }
+
+
+/**
+ * remove data from tables and reset sequences for SERIAL id fields
+ * @param {knex instance} db
+ * @returns {Promise} - when tables are cleared
+ */
+function cleanTables(db) {
+  return db.transaction(trx =>
+    trx.raw(
+      `TRUNCATE
+          "users",
+          "user_info",
+          "user_genres",
+          "user_platforms",
+          "user_matches",
+          "user_rejections",
+          "conversations",
+          "messages"`
+    )
+      .then(() =>
+        Promise.all([
+          trx.raw(`ALTER SEQUENCE users_id_seq minvalue 0 START WITH 1`), //TODO may need id_seq for conversations sna messages
+          trx.raw(`SELECT setval('users_id_seq', 0)`)                     //! Not sure if this .then is done or not
+        ])
+      )
+  );
+}
+
+function makeMatches() {}
+function makeConversationsAndMeeages(){}
+function seedUsers(){}
+function seedUsersAndUserInfoAndPlatformsAndGenres(){}
+// TODO seeds for matches and convos
+
+module.exports = {
+  makeKnexInstance,
+  makeUsersArray,
+  makeUserInfoAndPlatformsAndGenres,
+  makeAuthHeader,
+  cleanTables,
+  seedUsers
+};
