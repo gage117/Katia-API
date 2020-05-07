@@ -53,7 +53,7 @@ swipeRouter
 
   // Endpoint for Posting a "Swipe" action
   .post(bodyParser, (req, res, next) => {
-    // Get the id of swiped user from requesdt
+    // Get the id of swiped user from request
     const { id } = req.body;
 
     // Check if a match already exists between users
@@ -87,7 +87,7 @@ swipeRouter
 
 // Route used for 'swipe left' action
 swipeRouter
-  .route('/:userId/reject')
+  .route('/reject/:userId')
   // Post a reject action
   .post(bodyParser, (req, res, next) => {
     // Get swiped users id from request
