@@ -22,7 +22,17 @@ describe('User Endpoints', function () {
   //! The code above is almost a boilerplate for most tests
 
   describe(`GET /api/user`, () => {
+    // beforeEach('insert users', () => helpers.seedUsers(db, testUsers));
 
+    describe(`Given a valid user`, () => {
+      it(`responds with 201, serialized user with no password`, () => {
+        const newUser = {
+          email: 'tester123@ymail.com',
+          password: 'password',
+          display_name: 'gamerdude22'
+        };
+      })
+    })
   });
 
 });
