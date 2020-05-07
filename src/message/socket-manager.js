@@ -21,6 +21,8 @@ module.exports = socket => {
     // Get or Create a conversation for the two users
     MessageService.findOrCreateConversation(users.userId, users.receiverId)
       .then(conversation => {
+        // Send conversation id to client to store in state
+        socket.emit('conversationId', conversation.id);
         // Get all previous message history for the conversation, if any
         MessageService.getMessagesForConversation(conversation.id)
           .then(messages => {
