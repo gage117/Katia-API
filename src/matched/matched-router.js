@@ -56,7 +56,19 @@ matchedRouter
     } catch (error) {
       next(error);
     }
+  })
+  .delete(validateUserId, checkUserExists, (req, res, next) => {
+    const { match_user_id } = req.body;
 
+    if(!match_user_id) {
+      res.status(400).json({ error: '`match_user_id` is missing from request body' });
+    }
+
+    MatchedService.removeMatch(req.params.userId, match_user_id)
+      .then(() => {
+        return res.status(204).end();
+      })
+      .catch(next);
   });
 
 
