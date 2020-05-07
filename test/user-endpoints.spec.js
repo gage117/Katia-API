@@ -5,7 +5,7 @@ const helpers = require('./test-helpers');
 describe('User Endpoints', function () {
   let db;
 
-  const testUsers = helpers.makeUsersArray(); // TODO
+  const testUsers = helpers.makeUsersArray(); 
   const testUser = testUsers[0];
 
   before('make knex instance', () => {
@@ -18,5 +18,11 @@ describe('User Endpoints', function () {
   before('cleanup', () => helpers.cleanTables(db));
 
   afterEach('cleanup', () => helpers.cleanTables(db));
+
+  //! The code above is almost a boilerplate for most tests
+
+  describe(`GET /api/user`, () => {
+
+  });
 
 });

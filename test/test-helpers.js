@@ -102,9 +102,30 @@ function cleanTables(db) {
   );
 }
 
+/**
+ * insert users into db with bcrypted passwords and update sequence
+ * @param {knex instance} db
+ * @param {array} users - array of user objects for insertion
+ * @returns {Promise} - when users table seeded
+ */
+function seedUsers(db, users){
+    const preppedUsers = users.map(user => ({
+        ...user,
+        password: bcrypt.hashSync(user.password, 1)
+      }));
+
+      return db.transaction(async trx => {
+        await trx.into('users').insert(preppedUsers);
+    
+        await trx.raw(
+          `SELECT setval('users_id_seq', ?)`,
+          [users[users.length - 1].id]
+        )
+      });
+}
+
 function makeMatches() {}
 function makeConversationsAndMeeages(){}
-function seedUsers(){}
 function seedUsersAndUserInfoAndPlatformsAndGenres(){}
 // TODO seeds for matches and convos
 
