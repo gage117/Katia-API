@@ -5,7 +5,8 @@ TRUNCATE
   user_info,
   user_genres,
   user_platforms,
-  user_matches
+  user_matches,
+  user_rejections
   RESTART IDENTITY CASCADE;
 
 INSERT INTO users (email, password)
