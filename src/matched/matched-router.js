@@ -63,7 +63,7 @@ matchedRouter
 async function validateUserId(req, res, next) {
   try {
     let { userId } = req.params;
-    userId = Number(userId);
+    userId = Number(userId);0
 
     // If userId is not a number
     if(!Number(req.params.userId)) {

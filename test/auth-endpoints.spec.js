@@ -19,6 +19,7 @@ describe('User Endpoints', function () {
 
   afterEach('cleanup', () => helpers.cleanTables(db));
 
-  describe(``, () => {});
+  describe(`POST /api/auth/token`, () => {});
 
+  describe(`PUT /api/auth/token`, () => {});
 });

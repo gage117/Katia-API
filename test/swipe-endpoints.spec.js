@@ -19,6 +19,8 @@ describe('User Endpoints', function () {
 
   afterEach('cleanup', () => helpers.cleanTables(db));
 
-  describe(``, () => {});
+  describe(`GET /api/swipe/:userId`, () => {});
+  describe(`POST /api/swipe/:userId`, () => {});
 
+  describe(`POST /api/swipe/:userId/reject`, () => {});
 });
