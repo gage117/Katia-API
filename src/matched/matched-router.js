@@ -50,8 +50,11 @@ matchedRouter
           });
         }
       }
-
-      res.json(matched);
+      if (matched.length === 0) {
+        res.json(['none']);
+      } else {
+        res.json(matched);
+      }
 
     } catch (error) {
       next(error);
