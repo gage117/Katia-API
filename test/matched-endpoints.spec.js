@@ -19,6 +19,6 @@ describe('User Endpoints', function () {
 
   afterEach('cleanup', () => helpers.cleanTables(db));
 
-  describe(``, () => {});
+  describe(`GET /api/matched/:userId`, () => {});
 
 });

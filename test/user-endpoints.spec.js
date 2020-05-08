@@ -21,7 +21,7 @@ describe('User Endpoints', function () {
 
   //! The code above is almost a boilerplate for most tests
 
-  describe(`GET /api/user`, () => {
+  describe(`POST /api/user`, () => {
     // beforeEach('insert users', () => helpers.seedUsers(db, testUsers));
 
     describe(`Given a valid user`, () => {
@@ -47,4 +47,11 @@ describe('User Endpoints', function () {
     });
   });
 
+  describe(`GET /api/user`, () => {});
+
+  describe(`PATCH /api/user/:userId`, () => {});
+  describe(`GET /api/user/:userId`, () => {});
+  
+  describe(`GET /api/user/genres/all`, () => {});
+  describe(`GET /api/user/:userId/avatar`, () => {});
 });
