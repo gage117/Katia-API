@@ -19,6 +19,11 @@ const morganOption = (NODE_ENV === 'production')
   ? 'tiny'
   : 'common';
 
+
+  // app.use((req, res, next) => {
+  //   res.header('Access-Control-Allow-Origin', '*');
+  //   next();
+  // });
 // cors middleware for allowing cross origin
 app.use(cors());
 // morgan middleware for logging information
