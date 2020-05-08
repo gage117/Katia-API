@@ -22,7 +22,6 @@ describe('User Endpoints', function () {
   //! The code above is almost a boilerplate for most tests
 
   describe(`POST /api/user`, () => {
-    // beforeEach('insert users', () => helpers.seedUsers(db, testUsers));
 
     describe(`Given a valid user`, () => {
       it(`responds with 201, serialized user with no password`, () => {
@@ -47,9 +46,47 @@ describe('User Endpoints', function () {
     });
   });
 
-  describe(`GET /api/user`, () => {});
+  describe(`GET /api/user`, () => {
+    beforeEach('insert users', () => helpers.seedUsers(db, testUsers));
+    
+    describe('Given a valid user', () => {
+      it('responds 200 with serialized user profiles', () => {
+        return supertest(app)
+          .get('/api/user')
+          .expect(200)
+          .expect(res => {
+            expect(res.body).to.have.property('user_id');
+          });
+      });
+    });
+  });
 
-  describe(`PATCH /api/user/:userId`, () => {});
+  describe.only(`PATCH /api/user/:userId`, () => {
+    beforeEach('insert users', () => helpers.seedUsers(db, testUsers));
+    //console.log(testUsers);
+    //const logTHIS = helpers.makeUserInfo(db, testUsers);
+    console.log(testUsers.length);
+    //console.log(logTHIS);
+    describe(`Given a valid user`, () => {
+      it(`responds with 203 with the updated user`, () => {
+        const newUserData = {
+          display_name: 'Gamerduderrrrino',
+          bio: 'Im the best'
+        };
+  
+        return supertest(app)
+          .post('/api/user/1')
+          .send(newUserData)
+          .expect(203)
+          .expect(res => {
+            expect(res.body).to.have.property('display_name');
+            expect(res.body.display_name).to.eql(newUserData.display_name);
+            expect(res.body).to.not.have.property('password');
+          });
+      });
+    });
+
+  });
   describe(`GET /api/user/:userId`, () => {});
   
   describe(`GET /api/user/genres/all`, () => {});

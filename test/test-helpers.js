@@ -23,16 +23,27 @@ function makeUsersArray() {
     {
       id: 1,
       email: 'testuser1@gmail.com',
-      password: 'Password1!',
-      date_joined: '2020-05-01 15:55:01'
+      password: 'Password1!'
     },
     {
       id: 2,
       email: 'testuser2@gmail.com',
-      password: 'Password1!',
-      date_joined: '2020-05-01 15:55:02'
+      password: 'Password1!'
     },
   ];
+}
+
+function makeSeedUsersArray() {
+    return [
+      {
+        email: 'testuser1@gmail.com',
+        password: 'Password1!'
+      },
+      {
+        email: 'testuser2@gmail.com',
+        password: 'Password1!'
+      },
+    ];
 }
 
 /**
@@ -58,6 +69,41 @@ function makeUserInfoAndPlatformsAndGenres(user) {
   const genres = ['FPS', 'MOBA', 'Simulation'];
 
   return { user_info, platforms, genres };
+}
+
+function makeUserInfo(users) {
+    const preppedUserInfo = [];
+    for(let i = 0; i < users.length; i++) {
+        preppedUserInfo.push({
+            display_name: 'GamerDude22',
+            bio: 'I like games',
+            lfm_in: 'Fortnite,COD Warzone,Overwatch',
+            avatar: 'https://katia-app.s3-us-west-1.amazonaws.com/default_avatar.png',
+            user_id: users[i].id,
+            psn: 'kratos22',
+            xbox: 'spartan22',
+            nintendo: 'mario22',
+            steam: 'gordonFreeman22',
+            discord: 'bringBackTeamspeak22',
+            other: 'BattleNet: gamerdude22#3572'
+           })
+    }
+    // users.forEach(user => {
+    //     preppedUserInfo.push({
+    //         display_name: 'GamerDude22',
+    //         bio: 'I like games',
+    //         lfm_in: 'Fortnite,COD Warzone,Overwatch',
+    //         avatar: 'https://katia-app.s3-us-west-1.amazonaws.com/default_avatar.png',
+    //         user_id: user.id,
+    //         psn: 'kratos22',
+    //         xbox: 'spartan22',
+    //         nintendo: 'mario22',
+    //         steam: 'gordonFreeman22',
+    //         discord: 'bringBackTeamspeak22',
+    //         other: 'BattleNet: gamerdude22#3572'
+    //        })   
+    // });
+    return preppedUserInfo;
 }
 
 /**
@@ -108,7 +154,7 @@ function cleanTables(db) {
  * @param {array} users - array of user objects for insertion
  * @returns {Promise} - when users table seeded
  */
-function seedUsers(db, users){
+function seedUsers(db, users, user_info, platforms, genres){
     const preppedUsers = users.map(user => ({
         ...user,
         password: bcrypt.hashSync(user.password, 1)
@@ -120,8 +166,13 @@ function seedUsers(db, users){
         await trx.raw(
           `SELECT setval('users_id_seq', ?)`,
           [users[users.length - 1].id]
-        )
+        );
+
+        // await trx.into('user_info').insert(user_info);
+        // await trx.into('user_platforms').insert(platforms);
+        // await trx.into('user_genres').insert(genres);
       });
+    
 }
 
 function makeMatches() {}
@@ -135,5 +186,7 @@ module.exports = {
   makeUserInfoAndPlatformsAndGenres,
   makeAuthHeader,
   cleanTables,
-  seedUsers
+  seedUsers,
+  makeSeedUsersArray,
+  makeUserInfo
 };
