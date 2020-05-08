@@ -23,13 +23,13 @@ function makeUsersArray() {
     {
       id: 1,
       email: 'testuser1@gmail.com',
-      password: 'password',
+      password: 'Password1!',
       date_joined: '2020-05-01 15:55:01'
     },
     {
       id: 2,
       email: 'testuser2@gmail.com',
-      password: 'password',
+      password: 'Password1!',
       date_joined: '2020-05-01 15:55:02'
     },
   ];

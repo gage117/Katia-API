@@ -27,12 +27,24 @@ describe('User Endpoints', function () {
     describe(`Given a valid user`, () => {
       it(`responds with 201, serialized user with no password`, () => {
         const newUser = {
-          email: 'tester123@ymail.com',
-          password: 'password',
+          email: 'tester123@gmail.com',
+          password: 'Password1!',
           display_name: 'gamerdude22'
         };
-      })
-    })
+
+        return supertest(app)
+          .post('/api/user')
+          .send(newUser)
+          .expect(201)
+          .expect(res => {
+            expect(res.body).to.have.property('id');
+            expect(res.body.username).to.eql(newUser.username);
+            expect(res.body.name).to.eql(newUser.name);
+            expect(res.body).to.not.have.property('password');
+            expect(res.headers.location).to.eql(`/api/user/${res.body.id}`);
+          });
+      });
+    });
   });
 
 });
