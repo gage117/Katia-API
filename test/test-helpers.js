@@ -28,8 +28,28 @@ function makeUsersArray() {
     {
       id: 2,
       email: 'testuser2@gmail.com',
-      password: 'Password1!'
+      password: 'Password2!'
     },
+    {
+      id: 3,
+      email: 'testuser3@gmail.com',
+      password: 'Password3!'
+    },
+    {
+      id: 4,
+      email: 'testuser4@gmail.com',
+      password: 'Password4!'
+    },
+    {
+      id: 5,
+      email: 'testuser5@gmail.com',
+      password: 'Password5!'
+    },
+    {
+      id: 6,
+      email: 'testuser6@gmail.com',
+      password: 'Password6!'
+    }
   ];
 }
 
@@ -43,7 +63,30 @@ function makeSeedUsersArray() {
         email: 'testuser2@gmail.com',
         password: 'Password1!'
       },
+      {
+        email: 'testuser3@gmail.com',
+        password: 'Password3!'
+      },
+      {
+        email: 'testuser4@gmail.com',
+        password: 'Password4!'
+      },
+      {
+        email: 'testuser5@gmail.com',
+        password: 'Password5!'
+      },
+      {
+        email: 'testuser6@gmail.com',
+        password: 'Password6!'
+      }
     ];
+}
+/**
+ * creates matches from the user_matches table
+ * @returns {array} of user matches
+ */
+function makeMatchesArray() {
+    return [];
 }
 
 /**
@@ -165,7 +208,7 @@ function seedUsers(db, users){
     
 }
 
-function makeMatches() {}
+
 function makeConversationsAndMeeages(){}
 function seedUsersAndUserInfoAndPlatformsAndGenres(){}
 // TODO seeds for matches and convos
@@ -173,6 +216,7 @@ function seedUsersAndUserInfoAndPlatformsAndGenres(){}
 module.exports = {
   makeKnexInstance,
   makeUsersArray,
+  makeMatchesArray,
   makeUserInfoAndPlatformsAndGenres,
   makeAuthHeader,
   cleanTables,
