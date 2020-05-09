@@ -3,6 +3,7 @@ const path = require('path');
 const upload = require('./avatar-service');
 
 const UserService = require('./user-service');
+const checkUserExists = require('../middleware/check-user-exists');
 
 const userRouter = express.Router();
 const bodyParser = express.json();
@@ -94,17 +95,6 @@ userRouter
       })
       // Catch any errors and send them to error-handler middleware
       .catch(next);
-  })
-  // Endpoint for getting all Registered User Profiles
-  .get((req, res, next) => {
-    // Get all Profiles from DB
-    UserService.getAllProfiles(req.app.get('db'))
-      .then(profiles => {
-        // Return serialized profiles
-        res.json(UserService.serializeProfiles(profiles));
-      })
-      // Catch any errors and send them to error-handler middleware
-      .catch(next);
   });
 
 userRouter
@@ -180,7 +170,7 @@ userRouter
         // Add updated genres and platforms to returned user row
         user[0].genres = genres;
         user[0].platforms = platforms;
-        res.status(203).json(user[0]);
+        res.status(203).json(UserService.serializeProfile(user[0]));
       })
       // Catch any errors and send them to error-handler middleware
       .catch(next);
@@ -200,12 +190,9 @@ userRouter
     const platforms = await UserService.getUserPlatforms(db, userId).then(platforms => platforms.map(platform => platform.platform)).catch(next);
 
     // Return serialized profile
-    res.json({
-      ...UserService.serializeProfile(profile),
-      lfm_in: profile.lfm_in,
-      genres,
-      platforms
-    });
+    res.json(
+      UserService.serializeProfile(profile),
+    );
   });
 
 userRouter
@@ -233,31 +220,5 @@ userRouter
       // Catch any errors and send them to error-handler middleware
       .catch(next);
   });
-
-// Middleware function for checking if a user is registered
-// Possibly uneeded once auth router is implemented
-async function checkUserExists(req, res, next) {
-  try {
-    // Get a user by given ID from DB
-    const user = await UserService.getById(
-      req.app.get('db'),
-      req.params.userId
-    );
-    // If no user exits, return 404
-    if(!user)
-      res.status(404).json({
-        error: 'User doesn\'t exist'
-      });
-      
-    // Remove password from return object for security
-    delete user.password;
-    // Set user in response
-    res.user = user;
-    next();
-  } catch (error) {
-    // Catch any errors and send them to error-handler middleware
-    next(error);
-  }
-}
 
 module.exports = userRouter;

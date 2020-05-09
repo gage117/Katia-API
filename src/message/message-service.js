@@ -14,8 +14,8 @@ const MessageService = {
     return db.transaction(trx => {
       // First try to find an existing conversation
       trx('conversations')
-        .whereIn('user1id', [user1id, user2id])
-        .orWhereIn('user2id', [user1id, user2id])
+        .where('user1id', 'in', [user1id, user2id])
+        .andWhere('user2id', 'in', [user1id, user2id])
         .first()
         .then(conversation => {
           // If the conversation was found return it

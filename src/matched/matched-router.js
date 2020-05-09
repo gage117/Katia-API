@@ -1,11 +1,13 @@
 // TODO:  Update README.md for the /matched endpoint
-// TODO:  Add GamerTags / GamerIds to our MatchedService.getUserInfo when that is implemented
 const express = require('express');
 
 const matchedRouter = express.Router();
 
 const MatchedService = require('./matched-service');
 const UserService = require('../user/user-service');
+
+const validateUserId = require('../middleware/validate-user-id');
+const checkUserExists = require('../middleware/check-user-exists');
 
 //! This is a NAIVE implementation. It will work for our MVP, but the complexity is too high for a scalable product
 
@@ -38,80 +40,42 @@ matchedRouter
         }
         if(result && possibleMatches[i].match_user_id !== req.params.userId){
           // get the profile information of the matched user
-          const profile = await MatchedService.getUserInfo(req.app.get('db'), possibleMatches[i].match_user_id);
+          const profile = await UserService.getUserInfo(req.app.get('db'), possibleMatches[i].match_user_id);
           const genres = await UserService.getUserGenres(req.app.get('db'), possibleMatches[i].match_user_id).then(genres => genres.map(genre => genre.genre));
           const platforms = await UserService.getUserPlatforms(req.app.get('db'), possibleMatches[i].match_user_id).then(platforms => platforms.map(platform => platform.platform));
 
           matched.push({
-            ...UserService.serializeProfile(profile),
-            lfm_in: profile.lfm_in,
-            genres,
-            platforms
+            ...UserService.serializeProfile({
+              ...profile,
+              genres,
+              platforms
+            }),
           });
         }
       }
-
-      res.json(matched);
+      if (matched.length === 0) {
+        res.json(['none']);
+      } else {
+        res.json(matched);
+      }
 
     } catch (error) {
       next(error);
     }
+  })
+  .delete(validateUserId, checkUserExists, (req, res, next) => {
+    const { match_user_id } = req.body;
 
+
+    if(!match_user_id) {
+      res.status(400).json({ error: '`match_user_id` is missing from request body' });
+    }
+
+    MatchedService.removeMatch(req.params.userId, match_user_id)
+      .then(() => {
+        return res.status(204).end();
+      })
+      .catch(next);
   });
-
-
-async function validateUserId(req, res, next) {
-  try {
-    let { userId } = req.params;
-    userId = Number(userId);0
-
-    // If userId is not a number
-    if(!Number(req.params.userId)) {
-      return res.status(400).json({ error: 'userId must be an number'});
-    }
-    // If userId is greater than 2^53 - 1 or not an integer
-    if(!Number.isSafeInteger(userId)){
-      return res.status(400).json({
-        error: 'userId must be a safe integer'
-      });
-    }
-    if(userId < 0) {
-      return res.status(400).json({
-        error: 'userId must be a positive integer'
-      });
-    }
-
-    // After req.params.userId has been validated and converted from a string to number, we pass that on
-    req.params.userId = userId;
-    next();
-  } catch (error) {
-    next(error);
-  }
-}
-
-// Check if a user exists in DB
-async function checkUserExists(req, res, next) {
-    
-  try {
-    // Get a user by given ID
-    const user = await UserService.getById(
-      req.app.get('db'),
-      req.params.userId
-    );
-
-    // If no user exists, return 404
-    if(!user) {
-      return res.status(404).json({
-        error: 'User doesn\'t exist'
-      });
-    }
-
-    // Set the user object in the req
-    req.user = user;
-    next();
-  } catch (error) {
-    next(error);
-  }
-}
 
 module.exports = matchedRouter;

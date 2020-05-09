@@ -38,11 +38,11 @@ swipeRouter
       const genres = await UserService.getUserGenres(req.app.get('db'), user.id).then(genres => genres.map(genre => genre.genre));
       const platforms = await UserService.getUserPlatforms(req.app.get('db'), user.id).then(platforms => platforms.map(platform => platform.platform));
 
-      return {
+      return UserService.serializeProfile({
         ...user,
         genres,
         platforms
-      };
+      });
     });
 
     // Use Promise.all to enable using async function inside Array.map
@@ -53,7 +53,7 @@ swipeRouter
 
   // Endpoint for Posting a "Swipe" action
   .post(bodyParser, (req, res, next) => {
-    // Get the id of swiped user from requesdt
+    // Get the id of swiped user from request
     const { id } = req.body;
 
     // Check if a match already exists between users
@@ -87,7 +87,7 @@ swipeRouter
 
 // Route used for 'swipe left' action
 swipeRouter
-  .route('/:userId/reject')
+  .route('/reject/:userId')
   // Post a reject action
   .post(bodyParser, (req, res, next) => {
     // Get swiped users id from request
