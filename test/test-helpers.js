@@ -154,7 +154,7 @@ function cleanTables(db) {
  * @param {array} users - array of user objects for insertion
  * @returns {Promise} - when users table seeded
  */
-function seedUsers(db, users, user_info, platforms, genres){
+function seedUsers(db, users){
     const preppedUsers = users.map(user => ({
         ...user,
         password: bcrypt.hashSync(user.password, 1)
@@ -173,7 +173,6 @@ function seedUsers(db, users, user_info, platforms, genres){
         discord: `bringBackTeamspeak${user.id}`,
         other: `BattleNet: gamerdude${user.id}#35${user.id}`  
     }));
-    console.log(preppedInfo);
 
       return db.transaction(async trx => {
         await trx.into('users').insert(preppedUsers);
@@ -183,7 +182,7 @@ function seedUsers(db, users, user_info, platforms, genres){
           [users[users.length - 1].id]
         );
 
-        // await trx.into('user_info').insert(user_info);
+        await trx.into('user_info').insert(preppedInfo);
         // await trx.into('user_platforms').insert(platforms);
         // await trx.into('user_genres').insert(genres);
       });

@@ -63,11 +63,8 @@ describe('User Endpoints', function () {
 
   describe.only(`PATCH /api/user/:userId`, () => {
     beforeEach('insert users', () => helpers.seedUsers(db, testUsers));
-    //console.log(testUsers);
-    //const logTHIS = helpers.makeUserInfo(db, testUsers);
-    console.log(testUsers.length);
-    //console.log(logTHIS);
-    describe(`Given a valid user`, () => {
+
+    describe(`Given valid information to update a user`, () => {
       it(`responds with 203 with the updated user`, () => {
         const newUserData = {
           display_name: 'Gamerduderrrrino',
@@ -75,7 +72,7 @@ describe('User Endpoints', function () {
         };
   
         return supertest(app)
-          .post('/api/user/1')
+          .patch('/api/user/1')
           .send(newUserData)
           .expect(203)
           .expect(res => {
