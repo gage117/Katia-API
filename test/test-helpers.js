@@ -301,6 +301,7 @@ module.exports = {
   makeKnexInstance,
   makeUsersArray,
   makeMatchesArray,
+  makeRejectionsArray,
   makeUserInfoAndPlatformsAndGenres,
   makeAuthHeader,
   cleanTables,
