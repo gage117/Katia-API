@@ -1,3 +1,11 @@
+# Katia(API)
+
+# Authors
+- Gage Eide
+- Ron Martin
+- Matthew Wagaman
+- Jose Lopez
+
 ## Endpoints
 ### This is a JSON API server, it both expects JSON and returns JSON.
 /auth/token
@@ -19,13 +27,9 @@
 * GET Get all matches that our logged in user has "approved" during swiping. Requires ```userId``` of the logged in user. Returns an array of Objects for each match with their ```display_name```, ```bio```, ```lfm_in```, and ```avatar```.
 * POST Functionally the same as POST /swipe/:userId
 
-### ENDPOINTS TODO:
-* /user/:userId/avatar
-Requires profileImg: the image file and title:
+/matched/:userId
+* GET Gets all matched users (if both users have "approved" of each other in the swiping phase). Requires ```userId``` of the logged in user. Returns a JSON array of objects containing the matched users profile data (including their genres, platforms, user_id, etc).
 
-# Express Boilerplate!
-
-This is a boilerplate project used for starting new projects!
 
 ## Set up
 
@@ -36,7 +40,6 @@ Complete the following steps to start a new project (NEW-PROJECT-NAME):
 3. Make a fresh start of the git history for this project with `rm -rf .git && git init`
 4. Install the node dependencies `npm install`
 5. Move the example Environment file to `.env` that will be ignored by git and read by the express server `mv example.env .env`
-6. Edit the contents of the `package.json` to use NEW-PROJECT-NAME instead of `"name": "express-boilerplate",`
 
 ## Scripts
 
@@ -47,5 +50,7 @@ Start nodemon for the application `npm run dev`
 Run the tests `npm test`
 
 ## Deploying
+
+You will need to have your own AWS account and S3 bucket setup. Our ```example.env``` has the names of all environment variables used, but you will need to use your own values in order to setup (e.g. your own JWT secret, AWS keys, database URLS, etc).
 
 When your new project is ready for deployment, add a new Heroku application with `heroku create`. This will make a new git remote called "heroku" and you can then `npm run deploy` which will push to this remote's master branch.

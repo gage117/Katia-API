@@ -14,7 +14,12 @@
     "deploy": "git push heroku master"
   },
   "keywords": [],
-  "author": "",
+  "contributors": [
+    "Gage Eide <email> (https://github.com/gage117)",
+    "Ron Martin <ronmartin89@gmail.com> (https://github.com/Izzle)",
+    "Matthew Wagaman <email> (https://github.com/AveraqeDev)",
+    "Jose Lopez <email> (https://github.com/JozyL27)"
+  ],
   "license": "ISC",
   "dependencies": {
     "aws-sdk": "^2.664.0",
