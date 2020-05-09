@@ -39,9 +39,7 @@ const MatchedService = {
       .where({ user_id })
       .andWhere('match_user_id', user_id)
       .del();
-  },
-  // TODO
-  serializeMatched(matched){}
+  }
 };
 
 module.exports = MatchedService;
