@@ -53,20 +53,20 @@ function makeSeedUsersArray() {
  */
 function makeUserInfoAndPlatformsAndGenres(user) {
   const user_info = {
-    display_name: 'GamerDude22',
+    display_name: `GamerDude${user.id}`,
     bio: 'I like games',
     lfm_in: 'Fortnite,COD Warzone,Overwatch',
     avatar: 'https://katia-app.s3-us-west-1.amazonaws.com/default_avatar.png',
     user_id: user.id,
-    psn: 'kratos22',
-    xbox: 'spartan22',
-    nintendo: 'mario22',
-    steam: 'gordonFreeman22',
-    discord: 'bringBackTeamspeak22',
-    other: 'BattleNet: gamerdude22#3572'
+    psn: `kratos${user.id}`,
+    xbox: `spartan${user.id}`,
+    nintendo: `mario${user.id}`,
+    steam: `gordonFreeman${user.id}`,
+    discord: `bringBackTeamspeak${user.id}`,
+    other: `BattleNet: gamerdude${user.id}#35${user.id}`  
   };
-  const platforms = ['PC', 'Xbox'];
-  const genres = ['FPS', 'MOBA', 'Simulation'];
+  const platforms = user.id % 2 === 0 ? 'PC' : 'Xbox';
+  const genres =  user.id % 2 === 0 ? 'FPS' : 'RPG';
 
   return { user_info, platforms, genres };
 }

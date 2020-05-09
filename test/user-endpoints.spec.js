@@ -7,6 +7,7 @@ describe('User Endpoints', function () {
 
   const testUsers = helpers.makeUsersArray(); 
   const testUser = testUsers[0];
+  const fullTestUser = helpers.makeUserInfoAndPlatformsAndGenres(testUser);
 
   before('make knex instance', () => {
     db = helpers.makeKnexInstance();
@@ -101,7 +102,47 @@ describe('User Endpoints', function () {
     });
 
   });
-  describe(`GET /api/user/:userId`, () => {});
+  describe.only(`GET /api/user/:userId`, () => {
+    beforeEach('insert users', () => helpers.seedUsers(db, testUsers));
+
+    describe('Given a valid user id', () => {
+      it('responds 200 with a the requested user profile', () => {
+        return supertest(app)
+          .get('/api/user/1')
+          .expect(200)
+          .expect(res => {
+            console.log(res.body);
+            console.log(fullTestUser);
+            expect(res.body).to.be.an('object');
+            expect(res.body).to.have.property('display_name');
+            expect(res.body).to.have.property('bio');
+            expect(res.body).to.have.property('lfm_in');
+            expect(res.body).to.have.property('avatar');
+            expect(res.body).to.have.property('xbox');
+            expect(res.body).to.have.property('psn');
+            expect(res.body).to.have.property('nintendo');
+            expect(res.body).to.have.property('steam');
+            expect(res.body).to.have.property('discord');
+            expect(res.body).to.have.property('other');
+            expect(res.body).to.have.property('genres');
+            expect(res.body).to.have.property('platforms');
+            expect(res.body.display_name).to.eql(fullTestUser.user_info.display_name);
+            expect(res.body.bio).to.eql(fullTestUser.user_info.bio);
+            expect(res.body.lfm_in).to.eql(fullTestUser.user_info.lfm_in);
+            expect(res.body.avatar).to.eql(fullTestUser.user_info.avatar);
+            expect(res.body.xbox).to.eql(fullTestUser.user_info.xbox);
+            expect(res.body.psn).to.eql(fullTestUser.user_info.psn);
+            expect(res.body.nintendo).to.eql(fullTestUser.user_info.nintendo);
+            expect(res.body.steam).to.eql(fullTestUser.user_info.steam);
+            expect(res.body.discord).to.eql(fullTestUser.user_info.discord);
+            expect(res.body.other).to.eql(fullTestUser.user_info.other);
+            expect(res.body.genres[0]).to.eql(fullTestUser.genres);
+            expect(res.body.platforms[0]).to.eql(fullTestUser.platforms);
+            expect(res.body).to.not.have.property('password');
+          });
+      });
+    });
+  });
   
   describe(`GET /api/user/genres/all`, () => {});
   describe(`GET /api/user/:userId/avatar`, () => {});
