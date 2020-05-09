@@ -21,7 +21,7 @@ describe('User Endpoints', function () {
 
   afterEach('cleanup', () => helpers.cleanTables(db));
 
-  describe(`GET /api/swipe/:userId`, () => {
+  describe.only(`GET /api/swipe/:userId`, () => {
     beforeEach('insert users', () => helpers.seedUsers(db, testUsers));
     beforeEach('insert matches and rejections', () => helpers.seedMatchesAndRejections(db, userMatches, userRejections));
 
@@ -33,6 +33,17 @@ describe('User Endpoints', function () {
           .expect(res => {
             console.log(res.body);
             expect(res.body).to.be.an('object');
+            expect(res.body.queue).to.be.an('array');
+            expect(res.body.queue[0]).to.be.an('object');
+            expect(res.body.queue[0]).to.have.property('id');
+            expect(res.body.queue[0]).to.have.property('display_name');
+            expect(res.body.queue[0]).to.have.property('bio');
+            expect(res.body.queue[0]).to.have.property('lfm_in');
+            expect(res.body.queue[0]).to.have.property('avatar');
+            expect(res.body.queue[0]).to.have.property('genres');
+            expect(res.body.queue[0]).to.have.property('platforms');
+            expect(res.body.queue[0].genres).to.be.an('array');
+            expect(res.body.queue[0].platforms).to.be.an('array');
           });
       });
     });
@@ -45,7 +56,7 @@ describe('User Endpoints', function () {
 
   });
 
-  
+
   describe(`POST /api/swipe/:userId/reject`, () => {
     beforeEach('insert users', () => helpers.seedUsers(db, testUsers));
     beforeEach('insert matches and rejections', () => helpers.seedMatchesAndRejections(db, userMatches, userRejections));
