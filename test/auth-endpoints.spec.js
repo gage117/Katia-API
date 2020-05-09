@@ -1,4 +1,4 @@
-const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const app = require('../src/app');
 const helpers = require('./test-helpers');
 
@@ -41,5 +41,32 @@ describe('User Endpoints', function () {
     });
   });
 
-  describe(`PUT /api/auth/token`, () => {});
+  describe(`PUT /api/auth/token`, () => {
+    beforeEach('insert users', () => helpers.seedUsers(db, testUsers));
+
+    describe('Given valid bearer token and user', () => {
+      it('responds with 200 and a JWT', () => {
+        const validUser = {
+          id: testUser.id,
+          username: testUser.email
+        };
+        const expectedToken = jwt.sign(
+          { user_id: testUser.id, name: testUser.name },
+          process.env.JWT_SECRET,
+          {
+            subject: testUser.email,
+            expiresIn: process.env.JWT_EXPIRY,
+            algorithm: 'HS256',
+          }
+        );
+
+        return supertest(app)
+          .put('/api/auth/token')
+          .set('Authorization', helpers.makeAuthHeader(validUser))
+          .expect(200, {
+            authToken: expectedToken,
+          });
+      });
+    });
+  });
 });
