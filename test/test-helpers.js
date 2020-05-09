@@ -1,7 +1,6 @@
 const knex = require('knex');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-// TODO makeMatches
 
 /**
  * create a knex instance connected to postgres
@@ -292,10 +291,6 @@ function seedMatchesAndRejections(db, matches, rejections){
         await trx.into('user_rejections').insert(rejections);
     });
 }
-
-function makeConversationsAndMeeages(){}
-function seedUsersAndUserInfoAndPlatformsAndGenres(){}
-// TODO seeds for matches and convos
 
 module.exports = {
   makeKnexInstance,
