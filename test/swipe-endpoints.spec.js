@@ -21,7 +21,7 @@ describe('User Endpoints', function () {
 
   afterEach('cleanup', () => helpers.cleanTables(db));
 
-  describe.only(`GET /api/swipe/:userId`, () => {
+  describe(`GET /api/swipe/:userId`, () => {
     beforeEach('insert users', () => helpers.seedUsers(db, testUsers));
     beforeEach('insert matches and rejections', () => helpers.seedMatchesAndRejections(db, userMatches, userRejections));
 
@@ -31,7 +31,6 @@ describe('User Endpoints', function () {
           .get('/api/swipe/1')
           .expect(200)
           .expect(res => {
-            console.log(res.body);
             expect(res.body).to.be.an('object');
             expect(res.body.queue).to.be.an('array');
             expect(res.body.queue[0]).to.be.an('object');
@@ -54,6 +53,11 @@ describe('User Endpoints', function () {
     beforeEach('insert users', () => helpers.seedUsers(db, testUsers));
     beforeEach('insert matches and rejections', () => helpers.seedMatchesAndRejections(db, userMatches, userRejections));
 
+    describe('Given a valid request', () => {
+      it('returns 200 with a blah', () => {
+        
+      });
+    });
   });
 
 
@@ -61,5 +65,10 @@ describe('User Endpoints', function () {
     beforeEach('insert users', () => helpers.seedUsers(db, testUsers));
     beforeEach('insert matches and rejections', () => helpers.seedMatchesAndRejections(db, userMatches, userRejections));
 
+    describe('Given a valid request', () => {
+      it('returns 200 with a blah', () => {
+        
+      });
+    });
   });
 });
