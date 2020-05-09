@@ -231,7 +231,7 @@ function cleanTables(db) {
  * and inserts user_info, user_platforms, and user_genres
  * @param {knex instance} db
  * @param {array} users - array of user objects for insertion
- * @returns {Promise} - when users table seeded
+ * @returns {Promise} - when users, user_info, user_platforms, and user_genres  tables are seeded
  */
 function seedUsers(db, users){
     const preppedUsers = users.map(user => ({
@@ -277,7 +277,21 @@ function seedUsers(db, users){
       });
     
 }
+/**
+ * insert users into db with bcrypted passwords and update sequence
+ * and inserts user_info, user_platforms, and user_genres
+ * @param {knex instance} db
+ * @param {array} matches - array of match objects for insertion
+ * @param {array} rejections - array of rejection objects for insertion
+ * @returns {Promise} - when user_matches and user_rejections tables are seeded
+ */
+function seedMatchesAndRejections(db, matches, rejections){
 
+    return db.transaction(async trx => {
+        await trx.into('user_matches').insert(matches);
+        await trx.into('user_rejections').insert(rejections);
+    });
+}
 
 function makeConversationsAndMeeages(){}
 function seedUsersAndUserInfoAndPlatformsAndGenres(){}
@@ -291,5 +305,6 @@ module.exports = {
   makeAuthHeader,
   cleanTables,
   seedUsers,
+  seedMatchesAndRejections,
   makeSeedUsersArray
 };
