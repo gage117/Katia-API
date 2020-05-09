@@ -53,8 +53,8 @@ describe('User Endpoints', function () {
     beforeEach('insert users', () => helpers.seedUsers(db, testUsers));
     beforeEach('insert matches and rejections', () => helpers.seedMatchesAndRejections(db, userMatches, userRejections));
 
-    describe('Given a valid request', () => {
-      it('returns 201 with a json string "match created"', () => {
+    describe('Given a valid match', () => {
+      it('returns 201 with a string "match created"', () => {
         const userId = { id: 6 };
 
         return supertest(app)
@@ -74,9 +74,18 @@ describe('User Endpoints', function () {
     beforeEach('insert users', () => helpers.seedUsers(db, testUsers));
     beforeEach('insert matches and rejections', () => helpers.seedMatchesAndRejections(db, userMatches, userRejections));
 
-    describe('Given a valid request', () => {
-      it('returns 201 with a blah', () => {
+    describe('Given a valid rejection swipe', () => {
+      it('returns 201 with a string "user rejected"', () => {
+        const userId = { id: 5 };
 
+        return supertest(app)
+          .post('/api/swipe/1/reject')
+          .send(userId)
+          .expect(201)
+          .expect(res => {
+            expect(res.body).to.be.a('string');
+            expect(res.body).to.eql('user rejected');
+          });
       });
     });
   });
