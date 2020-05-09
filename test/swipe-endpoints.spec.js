@@ -49,12 +49,12 @@ describe('User Endpoints', function () {
   });
 
 
-  describe.only(`POST /api/swipe/:userId`, () => {
+  describe(`POST /api/swipe/:userId`, () => {
     beforeEach('insert users', () => helpers.seedUsers(db, testUsers));
     beforeEach('insert matches and rejections', () => helpers.seedMatchesAndRejections(db, userMatches, userRejections));
 
     describe('Given a valid request', () => {
-      it('returns 201 with a json string message', () => {
+      it('returns 201 with a json string "match created"', () => {
         const userId = { id: 6 };
 
         return supertest(app)
@@ -62,7 +62,8 @@ describe('User Endpoints', function () {
           .send(userId)
           .expect(201)
           .expect(res => {
-            console.log(res.body);
+            expect(res.body).to.be.a('string');
+            expect(res.body).to.eql('match created');
           });
       });
     });
