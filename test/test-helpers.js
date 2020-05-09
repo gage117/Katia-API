@@ -292,6 +292,19 @@ function seedMatchesAndRejections(db, matches, rejections){
     });
 }
 
+/**
+ * 
+ * @param {knex instance} db 
+ * @param {integer} user_id 
+ * @param {string} imageLocation - url location of avatar
+ */
+function removeAvatar(db, user_id) {
+    return db('user_info')
+        .where({ user_id })
+        .update({ avatar: '' })
+        .returning('*');
+}
+
 module.exports = {
   makeKnexInstance,
   makeUsersArray,
@@ -302,5 +315,6 @@ module.exports = {
   cleanTables,
   seedUsers,
   seedMatchesAndRejections,
-  makeSeedUsersArray
+  makeSeedUsersArray,
+  removeAvatar
 };
