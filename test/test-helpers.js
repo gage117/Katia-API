@@ -71,41 +71,6 @@ function makeUserInfoAndPlatformsAndGenres(user) {
   return { user_info, platforms, genres };
 }
 
-function makeUserInfo(users) {
-    const preppedUserInfo = [];
-    for(let i = 0; i < users.length; i++) {
-        preppedUserInfo.push({
-            display_name: 'GamerDude22',
-            bio: 'I like games',
-            lfm_in: 'Fortnite,COD Warzone,Overwatch',
-            avatar: 'https://katia-app.s3-us-west-1.amazonaws.com/default_avatar.png',
-            user_id: users[i].id,
-            psn: 'kratos22',
-            xbox: 'spartan22',
-            nintendo: 'mario22',
-            steam: 'gordonFreeman22',
-            discord: 'bringBackTeamspeak22',
-            other: 'BattleNet: gamerdude22#3572'
-           })
-    }
-    // users.forEach(user => {
-    //     preppedUserInfo.push({
-    //         display_name: 'GamerDude22',
-    //         bio: 'I like games',
-    //         lfm_in: 'Fortnite,COD Warzone,Overwatch',
-    //         avatar: 'https://katia-app.s3-us-west-1.amazonaws.com/default_avatar.png',
-    //         user_id: user.id,
-    //         psn: 'kratos22',
-    //         xbox: 'spartan22',
-    //         nintendo: 'mario22',
-    //         steam: 'gordonFreeman22',
-    //         discord: 'bringBackTeamspeak22',
-    //         other: 'BattleNet: gamerdude22#3572'
-    //        })   
-    // });
-    return preppedUserInfo;
-}
-
 /**
  * make a bearer token with jwt for authorization header
  * @param {object} user - contains `id`, `username`
@@ -150,6 +115,7 @@ function cleanTables(db) {
 
 /**
  * insert users into db with bcrypted passwords and update sequence
+ * and inserts user_info, user_platforms, and user_genres
  * @param {knex instance} db
  * @param {array} users - array of user objects for insertion
  * @returns {Promise} - when users table seeded
@@ -161,7 +127,7 @@ function seedUsers(db, users){
       }));
     
     const preppedInfo = users.map(user => ({
-        display_name: 'GamerDude22',
+        display_name: `GamerDude${user.id}`,
         bio: 'I like games',
         lfm_in: 'Fortnite,COD Warzone,Overwatch',
         avatar: 'https://katia-app.s3-us-west-1.amazonaws.com/default_avatar.png',
@@ -174,6 +140,11 @@ function seedUsers(db, users){
         other: `BattleNet: gamerdude${user.id}#35${user.id}`  
     }));
 
+    const preppedGenres = users.map(user => ({
+        user_id: user.id,
+        genre: user.id % 2 === 0 ? 'FPS' : 'RPG'
+    }));
+
       return db.transaction(async trx => {
         await trx.into('users').insert(preppedUsers);
     
@@ -183,8 +154,8 @@ function seedUsers(db, users){
         );
 
         await trx.into('user_info').insert(preppedInfo);
-        // await trx.into('user_platforms').insert(platforms);
-        // await trx.into('user_genres').insert(genres);
+        // await trx.into('user_platforms').insert(preppedPlatforms);
+        await trx.into('user_genres').insert(preppedGenres);
       });
     
 }
@@ -201,6 +172,5 @@ module.exports = {
   makeAuthHeader,
   cleanTables,
   seedUsers,
-  makeSeedUsersArray,
-  makeUserInfo
+  makeSeedUsersArray
 };

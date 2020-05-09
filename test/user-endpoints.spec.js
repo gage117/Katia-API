@@ -46,7 +46,7 @@ describe('User Endpoints', function () {
     });
   });
 
-  describe(`GET /api/user`, () => {
+  describe.only(`GET /api/user`, () => {
     beforeEach('insert users', () => helpers.seedUsers(db, testUsers));
     
     describe('Given a valid user', () => {
@@ -55,13 +55,26 @@ describe('User Endpoints', function () {
           .get('/api/user')
           .expect(200)
           .expect(res => {
-            expect(res.body).to.have.property('user_id');
+            expect(res.body).to.be.an('array');
+            expect(res.body[0]).to.be.an('object');
+            expect(res.body[0]).to.have.property('user_id');
+            expect(res.body[0]).to.have.property('display_name');
+            expect(res.body[0]).to.have.property('bio');
+            expect(res.body[0]).to.have.property('lfm_in');
+            expect(res.body[0]).to.have.property('avatar');
+            expect(res.body[0]).to.have.property('xbox');
+            expect(res.body[0]).to.have.property('psn');
+            expect(res.body[0]).to.have.property('nintendo');
+            expect(res.body[0]).to.have.property('steam');
+            expect(res.body[0]).to.have.property('discord');
+            expect(res.body[0]).to.have.property('other');
+            expect(res.body[0]).to.not.have.property('password');
           });
       });
     });
   });
 
-  describe.only(`PATCH /api/user/:userId`, () => {
+  describe(`PATCH /api/user/:userId`, () => {
     beforeEach('insert users', () => helpers.seedUsers(db, testUsers));
 
     describe(`Given valid information to update a user`, () => {
