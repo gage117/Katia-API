@@ -78,7 +78,7 @@ swipeRouter
         )
           .then(() => {
             // Return 201
-            res.status(201).end();
+            res.status(201).json('match created');
           });
       })
       // Catch any errors and send them to error-handler middleware
@@ -115,7 +115,7 @@ swipeRouter
         )
           .then(() => {
             // Return 201
-            res.status(201).end();
+            res.status(201).json('user rejected');
           });
       })
       // Catch any errors and send them to error-handler middleware
