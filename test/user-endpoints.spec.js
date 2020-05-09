@@ -46,7 +46,7 @@ describe('User Endpoints', function () {
     });
   });
 
-  describe.only(`GET /api/user`, () => {
+  describe(`GET /api/user`, () => {
     beforeEach('insert users', () => helpers.seedUsers(db, testUsers));
     
     describe('Given a valid user', () => {
@@ -79,11 +79,13 @@ describe('User Endpoints', function () {
 
     describe(`Given valid information to update a user`, () => {
       it(`responds with 203 with the updated user`, () => {
-        const newUserData = {
-          display_name: 'Gamerduderrrrino',
-          bio: 'Im the best'
-        };
-  
+        // const newUserData = {
+        //   display_name: 'Gamerduderrrrino',
+        //   bio: 'Im the best'
+        // };
+        let newUserData = helpers.makeUserInfoAndPlatformsAndGenres(testUser);
+        newUserData = newUserData.user_info;
+        
         return supertest(app)
           .patch('/api/user/1')
           .send(newUserData)

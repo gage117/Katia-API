@@ -140,6 +140,11 @@ function seedUsers(db, users){
         other: `BattleNet: gamerdude${user.id}#35${user.id}`  
     }));
 
+    const preppedPlatforms = users.map(user => ({
+        user_id: user.id,
+        platform: user.id % 2 === 0 ? 'PC' : 'Xbox'
+    }));
+
     const preppedGenres = users.map(user => ({
         user_id: user.id,
         genre: user.id % 2 === 0 ? 'FPS' : 'RPG'
@@ -154,7 +159,7 @@ function seedUsers(db, users){
         );
 
         await trx.into('user_info').insert(preppedInfo);
-        // await trx.into('user_platforms').insert(preppedPlatforms);
+        await trx.into('user_platforms').insert(preppedPlatforms);
         await trx.into('user_genres').insert(preppedGenres);
       });
     
