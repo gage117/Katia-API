@@ -102,7 +102,7 @@ describe('User Endpoints', function () {
     });
 
   });
-  describe.only(`GET /api/user/:userId`, () => {
+  describe(`GET /api/user/:userId`, () => {
     beforeEach('insert users', () => helpers.seedUsers(db, testUsers));
 
     describe('Given a valid user id', () => {
@@ -144,6 +144,23 @@ describe('User Endpoints', function () {
     });
   });
   
-  describe(`GET /api/user/genres/all`, () => {});
-  describe(`GET /api/user/:userId/avatar`, () => {});
+  describe.skip(`GET /api/user/genres/all`, () => {
+    beforeEach('insert users', () => helpers.seedUsers(db, testUsers));
+    // TODO this might need a seedGenres helper
+    describe('Given a valid request', () => {
+      it('responds 200 with a list of all available genres', () => {
+        
+      });
+    });
+
+  });
+  describe.skip(`GET /api/user/:userId/avatar`, () => {
+    beforeEach('insert users', () => helpers.seedUsers(db, testUsers));
+    // TODO Not sure how to simluate the data for this. Looks like its formData
+    describe('Given a valid request', () => {
+      it('responds 200 with the location of the new avatar', () => {
+
+      });
+    });
+  });
 });
