@@ -19,7 +19,27 @@ describe('User Endpoints', function () {
 
   afterEach('cleanup', () => helpers.cleanTables(db));
 
-  describe(`POST /api/auth/token`, () => {});
+  describe(`POST /api/auth/token`, () => {
+    beforeEach('insert users', () => helpers.seedUsers(db, testUsers));
+
+    describe('Given valid user login credentials', () => {
+      it('responds with 200 and a JWT', () => {
+        const userInfo = {
+          email: testUser.email,
+          password: testUser.password
+        };
+
+        return supertest(app)
+          .post('/api/auth/token')
+          .send(userInfo)
+          .expect(200)
+          .expect(res => {
+            expect(res.body).to.have.property('authToken');
+            expect(res.body.authToken).to.be.a('string');
+          });
+      });
+    });
+  });
 
   describe(`PUT /api/auth/token`, () => {});
 });
