@@ -49,13 +49,21 @@ describe('User Endpoints', function () {
   });
 
 
-  describe(`POST /api/swipe/:userId`, () => {
+  describe.only(`POST /api/swipe/:userId`, () => {
     beforeEach('insert users', () => helpers.seedUsers(db, testUsers));
     beforeEach('insert matches and rejections', () => helpers.seedMatchesAndRejections(db, userMatches, userRejections));
 
     describe('Given a valid request', () => {
-      it('returns 200 with a blah', () => {
-        
+      it('returns 201 with a json string message', () => {
+        const userId = { id: 6 };
+
+        return supertest(app)
+          .post('/api/swipe/1')
+          .send(userId)
+          .expect(201)
+          .expect(res => {
+            console.log(res.body);
+          });
       });
     });
   });
@@ -66,8 +74,8 @@ describe('User Endpoints', function () {
     beforeEach('insert matches and rejections', () => helpers.seedMatchesAndRejections(db, userMatches, userRejections));
 
     describe('Given a valid request', () => {
-      it('returns 200 with a blah', () => {
-        
+      it('returns 201 with a blah', () => {
+
       });
     });
   });
