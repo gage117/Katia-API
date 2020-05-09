@@ -7,14 +7,6 @@ const MatchedService = {
         user_id
       });
   },
-  getUserInfo(db, user_id) {
-    return db('user_info')
-      .select('user_id', 'display_name', 'bio', 'lfm_in', 'avatar', 'xbox', 'psn', 'nintendo', 'steam', 'discord', 'other')
-      .where({
-        user_id
-      })
-      .first();
-  },
   // checks if a match exists betweeen the users
   // Returns true / false
   matchExists(db, user_id, match_user_id) {

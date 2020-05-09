@@ -41,15 +41,16 @@ matchedRouter
         }
         if(result && possibleMatches[i].match_user_id !== req.params.userId){
           // get the profile information of the matched user
-          const profile = await MatchedService.getUserInfo(req.app.get('db'), possibleMatches[i].match_user_id);
+          const profile = await UserService.getUserInfo(req.app.get('db'), possibleMatches[i].match_user_id);
           const genres = await UserService.getUserGenres(req.app.get('db'), possibleMatches[i].match_user_id).then(genres => genres.map(genre => genre.genre));
           const platforms = await UserService.getUserPlatforms(req.app.get('db'), possibleMatches[i].match_user_id).then(platforms => platforms.map(platform => platform.platform));
 
           matched.push({
-            ...UserService.serializeProfile(profile),
-            lfm_in: profile.lfm_in,
-            genres,
-            platforms
+            ...UserService.serializeProfile({
+              ...profile,
+              genres,
+              platforms
+            }),
           });
         }
       }
