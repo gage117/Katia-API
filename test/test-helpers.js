@@ -168,10 +168,13 @@ function seedUsers(db, users){
 /**
  * inserts genres into the user_genres table
  * @param {knex instance} db 
- * @param {array} genres 
+ * @param {array} genres array of genre types for insertion
  */
 function seedGenres(db, genres){
 
+    return db.transaction(async trx => {
+        await trx.into('user_genres').insert(genres);
+    })
     // CREATE TYPE genre_type AS enum (
     //     'Battle Royale',
     //     'FPS',

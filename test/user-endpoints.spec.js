@@ -111,8 +111,6 @@ describe('User Endpoints', function () {
           .get('/api/user/1')
           .expect(200)
           .expect(res => {
-            console.log(res.body);
-            console.log(fullTestUser);
             expect(res.body).to.be.an('object');
             expect(res.body).to.have.property('display_name');
             expect(res.body).to.have.property('bio');
@@ -144,12 +142,17 @@ describe('User Endpoints', function () {
     });
   });
   
-  describe.skip(`GET /api/user/genres/all`, () => {
-    beforeEach('insert users', () => helpers.seedUsers(db, testUsers));
-    // TODO this might need a seedGenres helper
+  describe(`GET /api/user/genres/all`, () => {
+    // beforeEach('insert users', () => helpers.seedUsers(db, testUsers));
+
     describe('Given a valid request', () => {
       it('responds 200 with a list of all available genres', () => {
-        
+        return supertest(app)
+          .get('/api/user/genres/all')
+          .expect(200)
+          .expect(res => {
+            console.log(res.body);
+          });
       });
     });
 
