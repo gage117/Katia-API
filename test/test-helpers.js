@@ -159,6 +159,21 @@ function seedUsers(db, users, user_info, platforms, genres){
         ...user,
         password: bcrypt.hashSync(user.password, 1)
       }));
+    
+    const preppedInfo = users.map(user => ({
+        display_name: 'GamerDude22',
+        bio: 'I like games',
+        lfm_in: 'Fortnite,COD Warzone,Overwatch',
+        avatar: 'https://katia-app.s3-us-west-1.amazonaws.com/default_avatar.png',
+        user_id: user.id,
+        psn: `kratos${user.id}`,
+        xbox: `spartan${user.id}`,
+        nintendo: `mario${user.id}`,
+        steam: `gordonFreeman${user.id}`,
+        discord: `bringBackTeamspeak${user.id}`,
+        other: `BattleNet: gamerdude${user.id}#35${user.id}`  
+    }));
+    console.log(preppedInfo);
 
       return db.transaction(async trx => {
         await trx.into('users').insert(preppedUsers);
