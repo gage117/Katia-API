@@ -79,20 +79,22 @@ describe('User Endpoints', function () {
 
     describe(`Given valid information to update a user`, () => {
       it(`responds with 203 with the updated user`, () => {
-        // const newUserData = {
-        //   display_name: 'Gamerduderrrrino',
-        //   bio: 'Im the best'
-        // };
         let newUserData = helpers.makeUserInfoAndPlatformsAndGenres(testUser);
         newUserData = newUserData.user_info;
-        
+
         return supertest(app)
           .patch('/api/user/1')
           .send(newUserData)
           .expect(203)
           .expect(res => {
             expect(res.body).to.have.property('display_name');
+            expect(res.body).to.have.property('bio');
+            expect(res.body).to.have.property('avatar');
+            expect(res.body).to.have.property('lfm_in');
             expect(res.body.display_name).to.eql(newUserData.display_name);
+            expect(res.body.bio).to.eql(newUserData.bio);
+            expect(res.body.avatar).to.eql(newUserData.avatar);
+            expect(res.body.lfm_in).to.eql(newUserData.lfm_in);
             expect(res.body).to.not.have.property('password');
           });
       });
