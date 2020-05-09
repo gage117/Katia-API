@@ -1,5 +1,4 @@
 // TODO:  Update README.md for the /matched endpoint
-// TODO:  Add GamerTags / GamerIds to our MatchedService.getUserInfo when that is implemented
 const express = require('express');
 
 const matchedRouter = express.Router();
@@ -66,6 +65,7 @@ matchedRouter
   })
   .delete(validateUserId, checkUserExists, (req, res, next) => {
     const { match_user_id } = req.body;
+
 
     if(!match_user_id) {
       res.status(400).json({ error: '`match_user_id` is missing from request body' });
