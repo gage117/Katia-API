@@ -1,10 +1,10 @@
 # Katia(API)
 
 # Authors
-- Gage Eide
-- Ron Martin
-- Matthew Wagaman
-- Jose Lopez
+- [Gage Eide](https://github.com/gage117 "Gage's Github")
+- [Ron Martin](https://github.com/Izzle "Ron's Github")
+- [Matthew Wagaman](https://github.com/AveraqeDev "Matthew's Github")
+- [Jose Lopez](https://github.com/JozyL27 "Jose's Github")
 
 ## Endpoints
 ### This is a JSON API server, it both expects JSON and returns JSON.
