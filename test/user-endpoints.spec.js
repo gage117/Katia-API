@@ -143,7 +143,7 @@ describe('User Endpoints', function () {
   });
   
   describe(`GET /api/user/genres/all`, () => {
-    // beforeEach('insert users', () => helpers.seedUsers(db, testUsers));
+    beforeEach('insert users', () => helpers.seedUsers(db, testUsers));
 
     describe('Given a valid request', () => {
       it('responds 200 with a list of all available genres', () => {
@@ -151,7 +151,27 @@ describe('User Endpoints', function () {
           .get('/api/user/genres/all')
           .expect(200)
           .expect(res => {
-            console.log(res.body);
+            expect(res.body).to.be.an('array');
+            expect(res.body[0]).to.be.an('object');
+            expect(res.body[0].genre).exist;
+            expect(res.body[0].genre).to.be.an('string');
+            expect(res.body).to.deep.include(
+              {genre: 'MOBA'}, 
+              {genre: 'Sports'},
+              {genre: 'FPS'},
+              {genre: 'MMO'},
+              {genre: 'Horror'},
+              {genre: 'Racing'},
+              {genre: 'Action'},
+              {genre: 'Action'},
+              {genre: 'Battle Royale'},
+              {genre: 'Adventure'},
+              {genre: 'RPG'},
+              {genre: 'Puzzle'},
+              {genre: 'VR'},
+              {genre: 'Platformer'},
+              {genre: 'Simulation'}
+            );
           });
       });
     });
