@@ -20,8 +20,6 @@ describe('User Endpoints', function () {
 
   afterEach('cleanup', () => helpers.cleanTables(db));
 
-  //! The code above is almost a boilerplate for most tests
-
   describe(`POST /api/user`, () => {
 
     describe(`Given a valid user`, () => {
@@ -177,11 +175,20 @@ describe('User Endpoints', function () {
     });
 
   });
-  describe.skip(`GET /api/user/:userId/avatar`, () => {
+  describe.only(`GET /api/user/:userId/avatar`, () => {
     beforeEach('insert users', () => helpers.seedUsers(db, testUsers));
     // TODO Not sure how to simluate the data for this. Looks like its formData
     describe('Given a valid request', () => {
       it('responds 200 with the location of the new avatar', () => {
+        const newImage = './images/test-image.jpg';
+
+        return supertest(app)
+          .post('/api/user/1/avatar')
+          .send(newImage)
+          .expect(200)
+          .expect(res => {
+            console.log(res.body);
+          });
 
       });
     });
