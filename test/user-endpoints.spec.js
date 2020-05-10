@@ -175,7 +175,7 @@ describe('User Endpoints', function () {
     });
 
   });
-  describe.skip(`GET /api/user/:userId/avatar`, () => {
+  describe.skip(`POST /api/user/:userId/avatar`, () => {
     beforeEach('insert users', () => helpers.seedUsers(db, testUsers));
     beforeEach('remove avatar', () => helpers.removeAvatar(db, testUser.id));
     // TODO Not sure how to simluate the data for this. Looks like its formData
