@@ -185,9 +185,9 @@ userRouter
     // Get users profile information from DB
     const profile = await UserService.getUserInfo(db, userId).catch(next);
     // Get users genres from DB
-    const genres = await UserService.getUserGenres(db, userId).then(genres => genres.map(genre => genre.genre)).catch(next);
+    profile.genres = await UserService.getUserGenres(db, userId).then(genres => genres.map(genre => genre.genre)).catch(next);
     // Get users platforms from DB
-    const platforms = await UserService.getUserPlatforms(db, userId).then(platforms => platforms.map(platform => platform.platform)).catch(next);
+    profile.platforms = await UserService.getUserPlatforms(db, userId).then(platforms => platforms.map(platform => platform.platform)).catch(next);
 
     // Return serialized profile
     res.json(
