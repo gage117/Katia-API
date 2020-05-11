@@ -38,11 +38,11 @@ swipeRouter
       const genres = await UserService.getUserGenres(req.app.get('db'), user.id).then(genres => genres.map(genre => genre.genre));
       const platforms = await UserService.getUserPlatforms(req.app.get('db'), user.id).then(platforms => platforms.map(platform => platform.platform));
 
-      return UserService.serializeProfile({
+      return {
         ...user,
         genres,
         platforms
-      });
+      };
     });
 
     // Use Promise.all to enable using async function inside Array.map
