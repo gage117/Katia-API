@@ -202,10 +202,7 @@ userRouter
 
     // Return serialized profile
     res.json({
-      ...UserService.serializeProfile(profile),
-      lfm_in: profile.lfm_in,
-      genres: profile.genres,
-      platforms: profile.platforms
+      ...UserService.serializeProfile(profile)
     });
   });
 
