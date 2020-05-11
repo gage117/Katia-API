@@ -64,7 +64,7 @@ matchedRouter
     }
   })
   .put(bodyParser, validateUserId, checkUserExists, (req, res, next) => {
-    console.log(req.body);
+    // Used to delete the user from the matches
     const { match_user_id } = req.body;
 
 
@@ -74,7 +74,7 @@ matchedRouter
 
     MatchedService.removeMatch(req.app.get('db'), req.params.userId, match_user_id)
       .then(() => {
-        return res.status(204).end();
+        return res.status(202).json({ message: 'Deleted' });
       })
       .catch(next);
   });
