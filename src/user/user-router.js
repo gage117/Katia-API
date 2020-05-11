@@ -170,7 +170,7 @@ userRouter
         // Add updated genres and platforms to returned user row
         user[0].genres = genres;
         user[0].platforms = platforms;
-        res.status(203).json(UserService.serializeProfile(user[0]));
+        res.status(203).json(user[0]);
       })
       // Catch any errors and send them to error-handler middleware
       .catch(next);
@@ -190,9 +190,12 @@ userRouter
     const platforms = await UserService.getUserPlatforms(db, userId).then(platforms => platforms.map(platform => platform.platform)).catch(next);
 
     // Return serialized profile
-    res.json(
-      UserService.serializeProfile(profile),
-    );
+    res.json({
+      ...UserService.serializeProfile(profile),
+      lfm_in: profile.lfm_in,
+      genres,
+      platforms
+    });
   });
 
 userRouter
@@ -211,7 +214,7 @@ userRouter
   .route('/:userId/avatar')
   // Endpoint for updating a users avatar using multer middleware
   .post(checkUserExists, upload.single('profileImg'), (req, res, next) => {
-    // Save the returned multer upload location to the DB
+    // Save the returned multer upload location to tnhe DB
     UserService.saveAvatar(req.app.get('db'), req.params.userId, req.file.location)
       .then(() => {
         // Return the location of new avatar
