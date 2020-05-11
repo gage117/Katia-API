@@ -5,6 +5,11 @@ const xss = require('xss');
 const REGEX_UPPER_LOWER_NUMBER_SPECIAL = /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&])[\S]+/;
 
 const UserService = {
+  // get every user from database
+  getAllUsers(db) {
+    return db('users')
+      .select('*');
+  },
   // get every user profile info from database
   getAllProfiles(db) {
     return db('user_info')
@@ -210,8 +215,6 @@ const UserService = {
       display_name: xss(user.display_name),
       bio: xss(user.bio),
       lfm_in: xss(user.lfm_in),
-      genres: user.genres,
-      platforms: user.platforms,
       avatar: user.avatar,
       xbox: xss(user.xbox),
       psn: xss(user.psn),
@@ -234,8 +237,6 @@ const UserService = {
       display_name: xss(profile.display_name),
       bio: xss(profile.bio),
       lfm_in: xss(profile.lfm_in),
-      genres: profile.genres,
-      platforms: profile.platforms,
       avatar: profile.avatar,
       xbox: xss(profile.xbox),
       psn: xss(profile.psn),

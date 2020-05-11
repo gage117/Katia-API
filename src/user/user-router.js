@@ -19,7 +19,7 @@ userRouter
       password
     } = req.body;
 
-    // Cehck that all required fields exist
+    // Check that all required fields exist
     for(const field of ['email', 'display_name', 'password'])
       if(!req.body[field])
         return res.status(400).json({
@@ -95,6 +95,17 @@ userRouter
       })
       // Catch any errors and send them to error-handler middleware
       .catch(next);
+  })
+  // Endpoint for getting all Registered User Profiles
+  .get((req, res, next) => {
+    // Get all Profiles from DB
+    UserService.getAllProfiles(req.app.get('db'))
+      .then(profiles => {
+      // Return serialized profiles
+        res.json(UserService.serializeProfiles(profiles));
+      })
+    // Catch any errors and send them to error-handler middleware
+      .catch(next);
   });
 
 userRouter
@@ -137,7 +148,7 @@ userRouter
       });
     }
 
-    // Validate that lfm_in is a max of 3 games, seperated by commas
+    // Validate that lfm_in is a max of 3 games, separated by commas
     if(lfm_in !== null && lfm_in.split(',').length > 3) {
       return res.status(400).json({
         error: '"lfm_in" must be a max of 3 games, separated by commas'
@@ -170,7 +181,7 @@ userRouter
         // Add updated genres and platforms to returned user row
         user[0].genres = genres;
         user[0].platforms = platforms;
-        res.status(203).json(UserService.serializeProfile(user[0]));
+        res.status(203).json(user[0]);
       })
       // Catch any errors and send them to error-handler middleware
       .catch(next);
@@ -190,9 +201,10 @@ userRouter
     profile.platforms = await UserService.getUserPlatforms(db, userId).then(platforms => platforms.map(platform => platform.platform)).catch(next);
 
     // Return serialized profile
-    res.json(
-      UserService.serializeProfile(profile),
-    );
+    res.json({
+      ...UserService.serializeProfile(profile),
+      lfm_in: profile.lfm_in
+    });
   });
 
 userRouter

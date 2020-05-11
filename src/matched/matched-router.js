@@ -5,6 +5,7 @@ const matchedRouter = express.Router();
 
 const MatchedService = require('./matched-service');
 const UserService = require('../user/user-service');
+const bodyParser = express.json();
 
 const validateUserId = require('../middleware/validate-user-id');
 const checkUserExists = require('../middleware/check-user-exists');
@@ -40,16 +41,15 @@ matchedRouter
         }
         if(result && possibleMatches[i].match_user_id !== req.params.userId){
           // get the profile information of the matched user
-          const profile = await UserService.getUserInfo(req.app.get('db'), possibleMatches[i].match_user_id);
+          const profile = await MatchedService.getUserInfo(req.app.get('db'), possibleMatches[i].match_user_id);
           const genres = await UserService.getUserGenres(req.app.get('db'), possibleMatches[i].match_user_id).then(genres => genres.map(genre => genre.genre));
           const platforms = await UserService.getUserPlatforms(req.app.get('db'), possibleMatches[i].match_user_id).then(platforms => platforms.map(platform => platform.platform));
 
           matched.push({
-            ...UserService.serializeProfile({
-              ...profile,
-              genres,
-              platforms
-            }),
+            ...UserService.serializeProfile(profile),
+            lfm_in: profile.lfm_in,
+            genres,
+            platforms,
           });
         }
       }
@@ -63,17 +63,18 @@ matchedRouter
       next(error);
     }
   })
-  .delete(validateUserId, checkUserExists, (req, res, next) => {
+  .put(bodyParser, validateUserId, checkUserExists, (req, res, next) => {
+    // Used to delete the user from the matches
     const { match_user_id } = req.body;
 
 
     if(!match_user_id) {
-      res.status(400).json({ error: '`match_user_id` is missing from request body' });
+      return res.status(400).json({ error: '`match_user_id` is missing from request body' });
     }
 
-    MatchedService.removeMatch(req.params.userId, match_user_id)
+    MatchedService.removeMatch(req.app.get('db'), req.params.userId, match_user_id)
       .then(() => {
-        return res.status(204).end();
+        return res.status(202).json({ message: 'Deleted' });
       })
       .catch(next);
   });

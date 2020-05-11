@@ -1,4 +1,13 @@
 const MatchedService = {
+  // different from user-service getUserInfo because I return the user_info
+  getUserInfo(db, user_id) {
+    return db('user_info')
+      .select('user_id', 'display_name', 'bio', 'lfm_in', 'avatar', 'xbox', 'psn', 'nintendo', 'steam', 'discord', 'other')
+      .where({
+        user_id
+      })
+      .first();
+  },
   // gets a users matches
   getUserMatches(db, user_id) {
     return db('user_matches')
