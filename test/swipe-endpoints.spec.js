@@ -2,7 +2,7 @@ const bcrypt = require('bcryptjs');
 const app = require('../src/app');
 const helpers = require('./test-helpers');
 
-describe('User Endpoints', function () {
+describe('Swipe Endpoints', function () {
   let db;
 
   const testUsers = helpers.makeUsersArray(); 
@@ -70,7 +70,7 @@ describe('User Endpoints', function () {
   });
 
 
-  describe(`POST /api/swipe/:userId/reject`, () => {
+  describe(`POST /api/swipe/reject/:userId`, () => {
     beforeEach('insert users', () => helpers.seedUsers(db, testUsers));
     beforeEach('insert matches and rejections', () => helpers.seedMatchesAndRejections(db, userMatches, userRejections));
 
@@ -79,7 +79,7 @@ describe('User Endpoints', function () {
         const userId = { id: 5 };
 
         return supertest(app)
-          .post('/api/swipe/1/reject')
+          .post('/api/swipe/reject/1')
           .send(userId)
           .expect(201)
           .expect(res => {

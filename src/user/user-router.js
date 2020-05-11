@@ -95,7 +95,18 @@ userRouter
       })
       // Catch any errors and send them to error-handler middleware
       .catch(next);
-  });
+  })
+  // Endpoint for getting all Registered User Profiles
+  .get((req, res, next) => {
+  // Get all Profiles from DB
+  UserService.getAllProfiles(req.app.get('db'))
+    .then(profiles => {
+      // Return serialized profiles
+      res.json(UserService.serializeProfiles(profiles));
+    })
+    // Catch any errors and send them to error-handler middleware
+    .catch(next);
+});
 
 userRouter
   .route('/:userId')
