@@ -5,6 +5,7 @@ const matchedRouter = express.Router();
 
 const MatchedService = require('./matched-service');
 const UserService = require('../user/user-service');
+const bodyParser = express.json();
 
 const validateUserId = require('../middleware/validate-user-id');
 const checkUserExists = require('../middleware/check-user-exists');
@@ -62,15 +63,16 @@ matchedRouter
       next(error);
     }
   })
-  .delete(validateUserId, checkUserExists, (req, res, next) => {
+  .put(bodyParser, validateUserId, checkUserExists, (req, res, next) => {
+    console.log(req.body);
     const { match_user_id } = req.body;
 
 
     if(!match_user_id) {
-      res.status(400).json({ error: '`match_user_id` is missing from request body' });
+      return res.status(400).json({ error: '`match_user_id` is missing from request body' });
     }
 
-    MatchedService.removeMatch(req.params.userId, match_user_id)
+    MatchedService.removeMatch(req.app.get('db'), req.params.userId, match_user_id)
       .then(() => {
         return res.status(204).end();
       })
