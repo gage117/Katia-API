@@ -211,56 +211,10 @@ userRouter
   // Endpoint for getting all available genres
   .get((req, res, next) => {
     // Get all genre types created in DB
-    // UserService.getGenres(req.app.get('db'))
+    UserService.getGenres(req.app.get('db'))
       // Return array of all genres
-      // .then(genres => res.status(200).json(genres))
+      .then(genres => res.status(200).json(genres.rows))
       // Catch any errors and send them to error-handler middleware
-      let genreTypes = [
-        {
-            "genre": "MOBA"
-        },
-        {
-            "genre": "Sports"
-        },
-        {
-            "genre": "FPS"
-        },
-        {
-            "genre": "MMO"
-        },
-        {
-            "genre": "Horror"
-        },
-        {
-            "genre": "Racing"
-        },
-        {
-            "genre": "Action"
-        },
-        {
-            "genre": "Battle Royale"
-        },
-        {
-            "genre": "Adventure"
-        },
-        {
-            "genre": "RPG"
-        },
-        {
-            "genre": "Puzzle"
-        },
-        {
-            "genre": "VR"
-        },
-        {
-            "genre": "Platformer"
-        },
-        {
-            "genre": "Simulation"
-        }
-    ]
-
-      res.status(200).json(genreTypes)
       .catch(next);
   });
 
