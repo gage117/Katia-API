@@ -101,8 +101,7 @@ const UserService = {
 
   // returns all genres available 
   getGenres(db) {
-    return db('user_genres')
-      .distinct(db.raw('unnest(enum_range(NULL::genre_type))::text AS genre'));
+    return db.raw('SELECT unnest(enum_range(NULL::genre_type))::text AS genre')
   },
 
   // updates a users preferred genres
