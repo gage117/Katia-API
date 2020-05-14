@@ -41,8 +41,11 @@ const upload = multer({
   fileFilter: fileFilter,
   limits: {
     // Limits file uploads to 2MB
-    fileSize: 200000
-  }
+    fileSize: 2000000
+  },
+  onError: function (err, next) {
+    next(err);
+  },
 });
 
 module.exports = upload;
