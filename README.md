@@ -1,5 +1,8 @@
 # Katia(API)
 
+## Summary
+- Katia is a social media application made for gamers by gamers. Quickly and easily find others who share the same games and platforms as you.
+
 # Authors
 - [Gage Eide](https://github.com/gage117 "Gage's Github")
 - [Ron Martin](https://github.com/Izzle "Ron's Github")
@@ -54,3 +57,6 @@ Run the tests `npm test`
 You will need to have your own AWS account and S3 bucket setup. Our ```example.env``` has the names of all environment variables used, but you will need to use your own values in order to setup (e.g. your own JWT secret, AWS keys, database URLS, etc).
 
 When your new project is ready for deployment, add a new Heroku application with `heroku create`. This will make a new git remote called "heroku" and you can then `npm run deploy` which will push to this remote's master branch.
+
+
+# Site: https://katia.now.sh/
