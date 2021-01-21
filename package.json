@@ -35,7 +35,7 @@
     "multer-s3": "^2.9.0",
     "path": "^0.12.7",
     "pg": "^7.8.0",
-    "socket.io": "^2.3.0",
+    "socket.io": "^2.4.0",
     "xss": "^1.0.6"
   },
   "devDependencies": {
