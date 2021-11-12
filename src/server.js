@@ -28,7 +28,10 @@ const { PORT, DATABASE_URL } = require('./config');
 // Create knex isntance
 const db = knex({
   client: 'pg',
-  connection: DATABASE_URL
+  connection: {
+    connectionString: DATABASE_URL,
+    SSL: true
+  }
 });
 
 // Set knex instance in app for easy access
