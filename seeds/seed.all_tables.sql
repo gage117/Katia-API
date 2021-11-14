@@ -11,6 +11,7 @@ TRUNCATE
 
 INSERT INTO users (email, password)
 VALUES
+  ('user@demo.com', '$2b$12$KRQIdXbRw4QwTxRl.gfZVevKFOnLK7CuM6okwYOFdwghTd2UjNNmW'),
   ('gamerdude22@test.com', '$2a$12$Pkxp8JTF90HG6gYbIKJiiuzPjBHSOcpe1oUY6c1ESHcZ0ISUHmm0K'),
   ('lonelygamer69@test.com', '$2a$12$Pkxp8JTF90HG6gYbIKJiiuzPjBHSOcpe1oUY6c1ESHcZ0ISUHmm0K'),
   ('player63@test.com', '$2a$12$Pkxp8JTF90HG6gYbIKJiiuzPjBHSOcpe1oUY6c1ESHcZ0ISUHmm0K'),
