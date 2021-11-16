@@ -22,7 +22,7 @@
   ],
   "license": "ISC",
   "dependencies": {
-    "aws-sdk": "^2.664.0",
+    "aws-sdk": "^2.814.0",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
